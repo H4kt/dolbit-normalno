@@ -10,22 +10,23 @@ import io.h4kt.pivosound.managers.audioPlayer
 import io.h4kt.pivosound.managers.unregisterVoiceConnection
 
 @OptIn(KordVoice::class)
-object CommandLeave : Command(
-    name = "leave",
-    description = "Request bot to leave current voice channel"
+object CommandStop : Command(
+    name = "stop",
+    description = "Request bot to stop the playback and clear the queue"
 ) {
 
     override suspend fun GuildChatInputCommandInteractionCreateEvent.execute() {
 
         val response = interaction.deferPublicResponse()
 
-        val connection = voiceConnection
+        val player = voiceConnection
+            ?.audioPlayer
             ?: run {
 
                 response.respond {
                     embed {
                         title = ":x: Not connected to a voice channel"
-                        description = "I cannot disconnect from somewhere I haven't connected to, dumbo"
+                        description = "I cannot stop the playback while I'm not playing anything, kiddo"
                         color = Colors.ERROR
                     }
                 }
@@ -33,16 +34,13 @@ object CommandLeave : Command(
                 return
             }
 
-        connection.run {
-            audioPlayer?.destroy()
-            kord.unregisterVoiceConnection(interaction.guildId)
-            leave()
-        }
+        player.stop()
+        player.queue.clear()
 
         response.respond {
             embed {
-                title = ":white_check_mark: Disconnected"
-                description = "I've left the current voice channel"
+                title = ":white_check_mark: Stopped"
+                description = "Playback has been stopped & queue has been cleared"
                 color = Colors.SUCCESS
             }
         }

@@ -12,6 +12,10 @@ class QueuedAudioPlayer(
 
     var repeatMode = RepeatMode.NONE
 
+    var isPaused: Boolean
+        get() = handle.isPaused
+        set(value) { handle.isPaused = value }
+
     var volume: Int
         get() = handle.volume
         set(value) { handle.volume = value }
@@ -50,11 +54,6 @@ class QueuedAudioPlayer(
 
     fun provide() = handle.provide()
 
-    fun destroy() {
-        queue.clear()
-        handle.destroy()
-    }
-
     fun enqueue(track: AudioTrack) {
 
         if (handle.playingTrack == null) {
@@ -63,6 +62,13 @@ class QueuedAudioPlayer(
             queue += track
         }
 
+    }
+
+    fun stop() = handle.stopTrack()
+
+    fun destroy() {
+        queue.clear()
+        handle.destroy()
     }
 
 }

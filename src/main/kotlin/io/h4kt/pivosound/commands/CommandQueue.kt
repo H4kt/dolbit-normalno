@@ -9,6 +9,7 @@ import io.h4kt.pivosound.extensions.hyperlink
 import io.h4kt.pivosound.extensions.voiceConnection
 import io.h4kt.pivosound.managers.audioPlayer
 import io.h4kt.pivosound.queue.RepeatMode
+import kotlin.time.Duration
 
 @OptIn(KordVoice::class)
 object CommandQueue : Command(

@@ -10,22 +10,23 @@ import io.h4kt.pivosound.managers.audioPlayer
 import io.h4kt.pivosound.managers.unregisterVoiceConnection
 
 @OptIn(KordVoice::class)
-object CommandLeave : Command(
-    name = "leave",
-    description = "Request bot to leave current voice channel"
+object CommandResume : Command(
+    name = "resume",
+    description = "Request bot to resume the playback"
 ) {
 
     override suspend fun GuildChatInputCommandInteractionCreateEvent.execute() {
 
         val response = interaction.deferPublicResponse()
 
-        val connection = voiceConnection
+        val player = voiceConnection
+            ?.audioPlayer
             ?: run {
 
                 response.respond {
                     embed {
                         title = ":x: Not connected to a voice channel"
-                        description = "I cannot disconnect from somewhere I haven't connected to, dumbo"
+                        description = "I cannot resume while I'm not playing anything, kiddo"
                         color = Colors.ERROR
                     }
                 }
@@ -33,18 +34,28 @@ object CommandLeave : Command(
                 return
             }
 
-        connection.run {
-            audioPlayer?.destroy()
-            kord.unregisterVoiceConnection(interaction.guildId)
-            leave()
-        }
+        if (player.isPaused) {
 
-        response.respond {
-            embed {
-                title = ":white_check_mark: Disconnected"
-                description = "I've left the current voice channel"
-                color = Colors.SUCCESS
+            response.respond {
+                embed {
+                    title = ":white_check_mark: Resumed"
+                    description = "Playback has been resumed"
+                    color = Colors.SUCCESS
+                }
             }
+
+            player.isPaused = false
+
+        } else {
+
+            response.respond {
+                embed {
+                    title = ":x: Not on pause"
+                    description = "How can I resume already running playback?!"
+                    color = Colors.ERROR
+                }
+            }
+
         }
 
     }

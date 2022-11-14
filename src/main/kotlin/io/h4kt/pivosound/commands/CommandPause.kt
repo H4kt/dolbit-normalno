@@ -10,22 +10,23 @@ import io.h4kt.pivosound.managers.audioPlayer
 import io.h4kt.pivosound.managers.unregisterVoiceConnection
 
 @OptIn(KordVoice::class)
-object CommandLeave : Command(
-    name = "leave",
-    description = "Request bot to leave current voice channel"
+object CommandPause : Command(
+    name = "pause",
+    description = "Request bot to pause the playback"
 ) {
 
     override suspend fun GuildChatInputCommandInteractionCreateEvent.execute() {
 
         val response = interaction.deferPublicResponse()
 
-        val connection = voiceConnection
+        val player = voiceConnection
+            ?.audioPlayer
             ?: run {
 
                 response.respond {
                     embed {
                         title = ":x: Not connected to a voice channel"
-                        description = "I cannot disconnect from somewhere I haven't connected to, dumbo"
+                        description = "I cannot pause while I'm not playing anything, kiddo"
                         color = Colors.ERROR
                     }
                 }
@@ -33,18 +34,28 @@ object CommandLeave : Command(
                 return
             }
 
-        connection.run {
-            audioPlayer?.destroy()
-            kord.unregisterVoiceConnection(interaction.guildId)
-            leave()
-        }
+        if (!player.isPaused) {
 
-        response.respond {
-            embed {
-                title = ":white_check_mark: Disconnected"
-                description = "I've left the current voice channel"
-                color = Colors.SUCCESS
+            response.respond {
+                embed {
+                    title = ":white_check_mark: Paused"
+                    description = "Playback has been paused"
+                    color = Colors.SUCCESS
+                }
             }
+
+            player.isPaused = true
+
+        } else {
+
+            response.respond {
+                embed {
+                    title = ":x: Already on pause"
+                    description = "How can I pause already paused playback?!"
+                    color = Colors.ERROR
+                }
+            }
+
         }
 
     }

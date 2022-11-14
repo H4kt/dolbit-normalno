@@ -33,7 +33,7 @@ dependencies {
 }
 
 application {
-    mainClass.set("MainKt")
+    mainClass.set("io.h4kt.pivosound.MainKt")
 }
 
 tasks.withType<KotlinCompile> {

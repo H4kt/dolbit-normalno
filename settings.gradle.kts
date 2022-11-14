@@ -1,3 +1,1 @@
-
-rootProject.name = "music-bot"
-
+rootProject.name = "pivo-sound"

@@ -16,7 +16,7 @@ class QueuedAudioPlayer(
         get() = handle.volume
         set(value) { handle.volume = value }
 
-    val currentTrack: AudioTrack
+    val currentTrack: AudioTrack?
         get() = handle.playingTrack
 
     val queue = LinkedList<AudioTrack>()
@@ -40,7 +40,12 @@ class QueuedAudioPlayer(
                     return
                 }
 
-                queue.pop()?.let { player.playTrack(it) }
+                val next = queue.pop() ?: return
+                player.playTrack(next)
+
+                if (repeatMode == RepeatMode.QUEUE) {
+                    queue.add(next)
+                }
 
             }
 

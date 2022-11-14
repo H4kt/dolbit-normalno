@@ -25,7 +25,7 @@ object CommandLeave : Command(
                 response.respond {
                     embed {
                         title = ":x: Not connected to a voice channel"
-                        description = "I cannot change disconnect from somewhere I haven't connected to, dumbo"
+                        description = "I cannot disconnect from somewhere I haven't connected to, dumbo"
                         color = Colors.ERROR
                     }
                 }

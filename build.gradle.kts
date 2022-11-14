@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.7.20"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
     application
 }
 
@@ -24,6 +25,8 @@ dependencies {
 
     implementation("com.sedmelluq:lavaplayer:1.3.77")
 
+    implementation("org.slf4j:slf4j-simple:1.7.30")
+
     implementation("dev.kord:kord-core:$kordVersion") {
         capabilities {
             requireCapability("dev.kord:core-voice:$kordVersion")
@@ -33,7 +36,7 @@ dependencies {
 }
 
 application {
-    mainClass.set("MainKt")
+    mainClass.set("io.h4kt.pivosound.MainKt")
 }
 
 tasks.withType<KotlinCompile> {

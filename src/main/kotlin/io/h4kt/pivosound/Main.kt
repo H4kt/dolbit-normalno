@@ -3,6 +3,7 @@ package io.h4kt.pivosound
 import dev.kord.common.annotation.KordVoice
 import io.h4kt.pivosound.commands.*
 import dev.kord.core.Kord
+import dev.kord.core.event.gateway.ReadyEvent
 import dev.kord.core.event.user.VoiceStateUpdateEvent
 import dev.kord.core.on
 import dev.kord.gateway.Intent
@@ -25,9 +26,17 @@ suspend fun main() {
     CommandJoin.register(kord)
     CommandPlay.register(kord)
 
+    kord.on<ReadyEvent> {
+        println("Log in successful")
+    }
+
     kord.on<VoiceStateUpdateEvent> {
 
         val old = old
+        if (old?.userId != kord.selfId && state.userId != kord.selfId) {
+            return@on
+        }
+
         if ((old?.channelId != null && state.channelId == null) || (old?.channelId != null && state.channelId != null)) {
             kord.unregisterVoiceConnection(old.guildId)?.apply {
                 audioPlayer?.destroy()

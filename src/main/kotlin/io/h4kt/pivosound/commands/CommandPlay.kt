@@ -16,7 +16,9 @@ object CommandPlay : Command(
     name = "play",
     description = "Request bot to play an audio track from given source",
     builder = {
-        string("youtube", "Plays an audio sourced from YouTube")
+        string("youtube", "Plays an audio sourced from YouTube") {
+            required = true
+        }
     }
 ) {
 

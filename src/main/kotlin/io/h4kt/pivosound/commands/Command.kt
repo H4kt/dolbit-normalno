@@ -5,6 +5,7 @@ import dev.kord.core.entity.application.ChatInputCommandCommand
 import dev.kord.core.event.interaction.GuildChatInputCommandInteractionCreateEvent
 import dev.kord.core.on
 import dev.kord.rest.builder.interaction.GlobalChatInputCreateBuilder
+import io.h4kt.pivosound.extensions.args
 
 abstract class Command(
     val name: String,
@@ -26,7 +27,21 @@ abstract class Command(
                 return@on
             }
 
-            execute()
+            val user = interaction.user
+            val guild = interaction.guild.fetchGuild()
+            val command = interaction.command
+
+            val argsStr = command.options
+                .map { (key, value) -> "$key:${value.value}" }
+                .joinToString(" ")
+
+            println("User ${user.tag} @ \"${guild.name}\" (guildId=${guild.id}) issued bot command: $name $argsStr")
+
+            try {
+                execute()
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
 
         }
 

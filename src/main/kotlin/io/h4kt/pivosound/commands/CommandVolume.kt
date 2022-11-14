@@ -17,7 +17,6 @@ object CommandVolume : Command(
     description = "Changes bot playback volume",
     builder = {
         int("volume", "New volume to set") {
-            repeat(10) { choice("$it", it.toLong()) }
             required = true
         }
     }
@@ -42,12 +41,26 @@ object CommandVolume : Command(
                 return
             }
 
-        player.volume = interaction.command.integers["volume"]!!.toInt()
+        val volume = interaction.command.integers["volume"]!!.toInt()
+        if (volume !in 0..100) {
+
+            response.respond {
+                embed {
+                    title = ":x: Invalid volume"
+                    description = "Volume must be in range of 0 to 100 inclusive"
+                    color = Colors.ERROR
+                }
+            }
+
+            return
+        }
+
+        player.volume = volume
 
         response.respond {
             embed {
                 title = ":white_check_mark: Changed volume"
-                description = "Volume set to ${player.volume}"
+                description = "Volume set to $volume"
                 color = Colors.SUCCESS
             }
         }

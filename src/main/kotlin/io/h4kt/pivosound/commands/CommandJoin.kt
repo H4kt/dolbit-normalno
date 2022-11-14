@@ -20,8 +20,9 @@ object CommandJoin : Command(
         val response = interaction.deferPublicResponse()
         val channel = getSenderVoiceChannel()
 
-        val connection = voiceConnection
-            ?.let {
+        val connection = try {
+
+            voiceConnection?.let {
 
                 response.respond {
                     embed {
@@ -33,6 +34,19 @@ object CommandJoin : Command(
 
                 return
             } ?: newVoiceConnection(channel)
+
+        } catch (ex: Exception) {
+
+            response.respond {
+                embed {
+                    title = ":x: Unable to join"
+                    description = "I'm unable to join your channel"
+                    color = Colors.ERROR
+                }
+            }
+
+            return
+        }
 
         if (connection != null) {
             response.respond {

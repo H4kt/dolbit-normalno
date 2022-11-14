@@ -14,7 +14,7 @@ import io.h4kt.pivosound.managers.audioPlayer
 @OptIn(KordVoice::class)
 object CommandVolume : Command(
     name = "volume",
-    description = "Changes bot playback volume",
+    description = "Changes bot's playback volume",
     builder = {
         int("volume", "New volume to set") {
             required = true

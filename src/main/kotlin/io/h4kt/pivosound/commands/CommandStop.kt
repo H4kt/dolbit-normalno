@@ -12,7 +12,7 @@ import io.h4kt.pivosound.managers.unregisterVoiceConnection
 @OptIn(KordVoice::class)
 object CommandStop : Command(
     name = "stop",
-    description = "Request bot to stop the playback and clear the queue"
+    description = "Requests bot to stop the playback and clear the queue"
 ) {
 
     override suspend fun GuildChatInputCommandInteractionCreateEvent.execute() {

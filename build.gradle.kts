@@ -23,8 +23,8 @@ repositories {
 
 dependencies {
 
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-hocon:1.4.1")
     implementation("com.sedmelluq:lavaplayer:1.3.77")
-
     implementation("org.slf4j:slf4j-simple:1.7.30")
 
     implementation("dev.kord:kord-core:$kordVersion") {

@@ -14,7 +14,7 @@ import io.h4kt.pivosound.managers.findTrack
 @OptIn(KordVoice::class)
 object CommandPlay : Command(
     name = "play",
-    description = "Request bot to play an audio track from given source",
+    description = "Requests bot to play an audio track from given source",
     builder = {
         string("youtube", "Plays an audio sourced from YouTube") {
             required = true
@@ -46,20 +46,26 @@ object CommandPlay : Command(
 
         val track = findTrack(query)
             ?: run {
-                response.respond { content = "Nothing found" }
+
+                response.respond {
+                    embed {
+                        title = ":x: Not found"
+                        description = "Found nothing by term $name"
+                        color = Colors.ERROR
+                    }
+                }
+
                 return
             }
 
         connection.audioPlayer?.enqueue(track)
 
         response.respond {
-
             embed {
                 title = ":white_check_mark: Added track"
                 description = "[${track.info.title}](${track.info.uri})"
                 color = Colors.SUCCESS
             }
-
         }
 
     }

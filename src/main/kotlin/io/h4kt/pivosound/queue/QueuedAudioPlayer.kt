@@ -4,6 +4,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason
+import io.h4kt.pivosound.extensions.popOrNull
 import java.util.*
 
 class QueuedAudioPlayer(
@@ -41,14 +42,8 @@ class QueuedAudioPlayer(
 
                 if (repeatMode == RepeatMode.CURRENT_TRACK) {
                     player.playTrack(track)
-                    return
-                }
-
-                val next = queue.pop() ?: return
-                player.playTrack(next)
-
-                if (repeatMode == RepeatMode.QUEUE) {
-                    queue.add(next)
+                } else {
+                    nextTrack()
                 }
 
             }
@@ -69,11 +64,31 @@ class QueuedAudioPlayer(
 
     }
 
+    fun skip() {
+        handle.stopTrack()
+        nextTrack()
+    }
+
+    fun seek(time: Long) {
+        currentTrack?.position = time
+    }
+
     fun stop() = handle.stopTrack()
 
     fun destroy() {
         queue.clear()
         handle.destroy()
+    }
+
+    private fun nextTrack() {
+
+        val next = queue.popOrNull() ?: return
+        handle.playTrack(next)
+
+        if (repeatMode == RepeatMode.QUEUE) {
+            queue.add(next)
+        }
+
     }
 
 }

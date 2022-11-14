@@ -9,16 +9,15 @@ import dev.kord.core.on
 import dev.kord.gateway.Intent
 import dev.kord.gateway.Intents
 import dev.kord.gateway.PrivilegedIntent
+import io.h4kt.pivosound.config.Config
 import io.h4kt.pivosound.extensions.registerCommands
 import io.h4kt.pivosound.managers.audioPlayer
 import io.h4kt.pivosound.managers.unregisterVoiceConnection
 
-const val DISCORD_TOKEN = "MTAzNzM5MDU1MzcwNjM5NzgyNw.Gbnihx.FY9tuhuzGuF6EtESyeopdaS7-g_XZ_MTZ_0smg"
-
 @OptIn(PrivilegedIntent::class, KordVoice::class)
 suspend fun main() {
 
-    val kord = Kord(token = DISCORD_TOKEN).apply {
+    val kord = Kord(token = Config.Discord.token).apply {
         registerCommands(
             CommandJoin,
             CommandPlay,
@@ -26,6 +25,10 @@ suspend fun main() {
             CommandResume,
             CommandVolume,
             CommandRepeat,
+            CommandSkip,
+            CommandSeek,
+            CommandRemove,
+            CommandMove,
             CommandQueue,
             CommandLeave
         )

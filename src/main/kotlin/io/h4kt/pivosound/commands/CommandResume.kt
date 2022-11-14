@@ -12,7 +12,7 @@ import io.h4kt.pivosound.managers.unregisterVoiceConnection
 @OptIn(KordVoice::class)
 object CommandResume : Command(
     name = "resume",
-    description = "Request bot to resume the playback"
+    description = "Requests bot to resume the playback"
 ) {
 
     override suspend fun GuildChatInputCommandInteractionCreateEvent.execute() {

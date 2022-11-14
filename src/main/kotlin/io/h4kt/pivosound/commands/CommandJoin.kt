@@ -12,7 +12,7 @@ import io.h4kt.pivosound.extensions.voiceConnection
 @OptIn(KordVoice::class)
 object CommandJoin : Command(
     name = "join",
-    description = "Request bot to join your voice channel"
+    description = "Requests bot to join your voice channel"
 ) {
 
     override suspend fun GuildChatInputCommandInteractionCreateEvent.execute() {

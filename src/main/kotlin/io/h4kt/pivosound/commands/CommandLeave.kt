@@ -12,7 +12,7 @@ import io.h4kt.pivosound.managers.unregisterVoiceConnection
 @OptIn(KordVoice::class)
 object CommandLeave : Command(
     name = "leave",
-    description = "Request bot to leave current voice channel"
+    description = "Requests bot to leave current voice channel"
 ) {
 
     override suspend fun GuildChatInputCommandInteractionCreateEvent.execute() {

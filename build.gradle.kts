@@ -16,7 +16,7 @@ repositories {
     mavenCentral()
 
     maven {
-        url = uri("https://m2.dv8tion.net/releases")
+        url = uri("https://jitpack.io")
     }
 
 }
@@ -24,7 +24,7 @@ repositories {
 dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-hocon:1.4.1")
-    implementation("com.sedmelluq:lavaplayer:1.3.77")
+    implementation("com.github.walkyst:lavaplayer-fork:1.3.99.2")
     implementation("org.slf4j:slf4j-simple:1.7.30")
 
     implementation("dev.kord:kord-core:$kordVersion") {

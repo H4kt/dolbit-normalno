@@ -6,18 +6,20 @@ import io.h4kt.pivosound.queue.QueuedAudioPlayer
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers
+import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import dev.kord.common.annotation.KordVoice
 import dev.kord.voice.VoiceConnection
+import io.h4kt.pivosound.config.Config
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 private val PLAYER_BY_CONN = HashMap<VoiceConnection, QueuedAudioPlayer>()
 
 private val playerManager = DefaultAudioPlayerManager().apply {
-    AudioSourceManagers.registerRemoteSources(this)
+    registerSourceManager(YoutubeAudioSourceManager(true, Config.YouTube.username, Config.YouTube.password))
 }
 
 val VoiceConnection.audioPlayer: QueuedAudioPlayer?

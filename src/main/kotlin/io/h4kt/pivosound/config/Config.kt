@@ -16,12 +16,21 @@ object Config {
             return configFile
         }
 
-    private val handle = ConfigFactory.parseFile(configFile)
+    private val root = ConfigFactory.parseFile(configFile)
 
     object Discord {
 
         val token: String
-            get() = handle.getString("discord.token")
+            get() = root.getString("discord.token")
+
+    }
+
+    object YouTube {
+
+        private val handle = root.getConfig("youtube")
+
+        val username = handle.getString("username")
+        val password = handle.getString("password")
 
     }
 

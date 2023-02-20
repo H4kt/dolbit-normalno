@@ -5,6 +5,7 @@ import dev.kord.common.annotation.KordVoice
 import dev.kord.core.behavior.interaction.response.respond
 import dev.kord.core.event.interaction.GuildChatInputCommandInteractionCreateEvent
 import dev.kord.rest.builder.interaction.int
+import dev.kord.rest.builder.interaction.integer
 import dev.kord.rest.builder.message.modify.embed
 import io.h4kt.pivosound.extensions.hyperlink
 import io.h4kt.pivosound.extensions.voiceConnection
@@ -16,7 +17,7 @@ object CommandRemove : Command(
     name = "remove",
     description = "Requests bot to remove track from the queue",
     builder = {
-        int("position", "Position to remove track at") {
+        integer("position", "Position to remove track at") {
             required = true
         }
     }

@@ -5,6 +5,7 @@ import dev.kord.common.annotation.KordVoice
 import dev.kord.core.behavior.interaction.response.respond
 import dev.kord.core.event.interaction.GuildChatInputCommandInteractionCreateEvent
 import dev.kord.rest.builder.interaction.int
+import dev.kord.rest.builder.interaction.integer
 import dev.kord.rest.builder.message.modify.embed
 import io.h4kt.pivosound.extensions.getSenderVoiceChannel
 import io.h4kt.pivosound.extensions.newVoiceConnection
@@ -14,9 +15,9 @@ import io.h4kt.pivosound.managers.audioPlayer
 @OptIn(KordVoice::class)
 object CommandVolume : Command(
     name = "volume",
-    description = "Changes bot's playback volume",
+    description = "Changes bots playback volume",
     builder = {
-        int("volume", "New volume to set") {
+        integer("volume", "New volume to set") {
             required = true
         }
     }

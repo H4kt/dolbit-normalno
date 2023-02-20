@@ -5,6 +5,7 @@ import dev.kord.common.annotation.KordVoice
 import dev.kord.core.behavior.interaction.response.respond
 import dev.kord.core.event.interaction.GuildChatInputCommandInteractionCreateEvent
 import dev.kord.rest.builder.interaction.int
+import dev.kord.rest.builder.interaction.integer
 import dev.kord.rest.builder.message.modify.embed
 import io.h4kt.pivosound.extensions.hyperlink
 import io.h4kt.pivosound.extensions.voiceConnection
@@ -17,11 +18,11 @@ object CommandMove : Command(
     description = "Requests bot to move track to a position",
     builder = {
 
-        int("from", "Position to move from") {
+        integer("from", "Position to move from") {
             required = true
         }
 
-        int("to", "Position to move to") {
+        integer("to", "Position to move to") {
             required = true
         }
 

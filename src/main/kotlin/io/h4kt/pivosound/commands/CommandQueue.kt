@@ -10,6 +10,7 @@ import io.h4kt.pivosound.extensions.voiceConnection
 import io.h4kt.pivosound.managers.audioPlayer
 import io.h4kt.pivosound.queue.RepeatMode
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(KordVoice::class)
 object CommandQueue : Command(
@@ -54,16 +55,26 @@ object CommandQueue : Command(
             embed {
 
                 title = ":notepad_spiral: Queue $repeatQueueSign"
+                color = Colors.INFO
 
-                description = if (queue.isNotEmpty()) {
-                    queue.foldIndexed("") { index, acc, it ->
-                        "$acc${index + 1}. ${it.info.hyperlink}\n"
-                    }
-                } else {
-                    ":x: Queue is empty"
+                if (queue.isEmpty()) {
+                    description = ":x: Queue is empty"
+                    return@embed
                 }
 
-                color = Colors.INFO
+                description = queue.foldIndexed("") { index, acc, it ->
+
+                    val position = "${index + 1}"
+                    val link = it.info.hyperlink
+
+                    val duration = it
+                        .position
+                        .takeIf { it != 0L }
+                        ?.milliseconds
+                        ?.let { " (${it})" }
+
+                    return@foldIndexed acc + "$position. $link ${ duration ?: "" }\n"
+                }
 
             }
 

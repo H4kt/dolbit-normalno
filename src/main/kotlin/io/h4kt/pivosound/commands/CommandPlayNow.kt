@@ -6,18 +6,15 @@ import dev.kord.core.behavior.interaction.response.respond
 import dev.kord.core.event.interaction.GuildChatInputCommandInteractionCreateEvent
 import dev.kord.rest.builder.interaction.string
 import dev.kord.rest.builder.message.modify.embed
-import io.h4kt.pivosound.commands.CommandPlayNow.execute
 import io.h4kt.pivosound.extensions.newVoiceConnection
 import io.h4kt.pivosound.extensions.voiceConnection
 import io.h4kt.pivosound.managers.audioPlayer
 import io.h4kt.pivosound.managers.findTrack
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 @OptIn(KordVoice::class)
-object CommandPlay : Command(
-    name = "play",
-    description = "Requests bot to play an audio track from given source",
+object CommandPlayNow : Command(
+    name = "playnow",
+    description = "Requests bot to instantly play an audio track from given source",
     builder = {
         string("youtube", "Plays an audio sourced from YouTube") {
             required = true
@@ -61,11 +58,34 @@ object CommandPlay : Command(
                 return
             }
 
-        connection.audioPlayer?.enqueue(track)
+        val player = connection.audioPlayer
+            ?: run {
+
+                response.respond {
+                    embed {
+                        title = ":x: Error"
+                        description = "An internal error occurred"
+                        color = Colors.ERROR
+                    }
+                }
+
+                return
+            }
+
+        player.apply {
+
+            currentTrack?.let {
+                val current = it.makeClone().apply { position = it.position }
+                queue.addFirst(current)
+            }
+
+            player.play(track)
+
+        }
 
         response.respond {
             embed {
-                title = ":white_check_mark: Added track"
+                title = ":white_check_mark: Playing right now"
                 description = "[${track.info.title}](${track.info.uri})"
                 color = Colors.SUCCESS
             }

@@ -41,7 +41,7 @@ class QueuedAudioPlayer(
                 }
 
                 if (repeatMode == RepeatMode.CURRENT_TRACK) {
-                    player.playTrack(track)
+                    player.playTrack(track.makeClone())
                 } else {
                     nextTrack()
                 }
@@ -64,6 +64,10 @@ class QueuedAudioPlayer(
 
     }
 
+    fun play(track: AudioTrack) {
+        handle.playTrack(track)
+    }
+
     fun skip() {
         handle.stopTrack()
         nextTrack()
@@ -83,10 +87,11 @@ class QueuedAudioPlayer(
     private fun nextTrack() {
 
         val next = queue.popOrNull() ?: return
+
         handle.playTrack(next)
 
         if (repeatMode == RepeatMode.QUEUE) {
-            queue.add(next)
+            queue.add(next.makeClone())
         }
 
     }

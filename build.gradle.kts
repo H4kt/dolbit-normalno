@@ -13,7 +13,7 @@ group = "io.h4kt"
 version = "1.0"
 
 application {
-    mainClass.set("io.h4kt.pivosound.MainKt")
+    mainClass.set("io.h4kt.pivosound.AppKt")
 }
 
 repositories {

@@ -1,3 +1,4 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -11,12 +12,20 @@ val kordVersion: String by project
 group = "io.h4kt"
 version = "1.0"
 
+application {
+    mainClass.set("io.h4kt.pivosound.MainKt")
+}
+
 repositories {
 
     mavenCentral()
 
     maven {
         url = uri("https://jitpack.io")
+    }
+
+    maven {
+        url = uri("https://oss.sonatype.org/content/repositories/snapshots")
     }
 
 }
@@ -35,10 +44,10 @@ dependencies {
 
 }
 
-application {
-    mainClass.set("io.h4kt.pivosound.MainKt")
-}
-
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+tasks.withType<ShadowJar> {
+    archiveFileName.set("pivo-sound-all.jar")
 }

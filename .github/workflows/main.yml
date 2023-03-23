@@ -18,6 +18,8 @@ jobs:
 
       - name: 🔧 Setup Gradle
         uses: gradle/gradle-build-action@v2
+
+      - name: 🔧 Make Gradlew runnable
         run: chmod +x ./gradlew
 
       - name: ⚒️ Gradle build

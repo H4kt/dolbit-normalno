@@ -7,12 +7,14 @@ import dev.kord.core.event.interaction.GuildChatInputCommandInteractionCreateEve
 import dev.kord.rest.builder.interaction.string
 import dev.kord.rest.builder.message.modify.embed
 import io.h4kt.pivosound.commands.CommandPlayNow.execute
+import io.h4kt.pivosound.extensions.hyperlink
 import io.h4kt.pivosound.extensions.newVoiceConnection
 import io.h4kt.pivosound.extensions.voiceConnection
 import io.h4kt.pivosound.managers.audioPlayer
 import io.h4kt.pivosound.managers.findTrack
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(KordVoice::class)
 object CommandPlay : Command(
@@ -66,7 +68,7 @@ object CommandPlay : Command(
         response.respond {
             embed {
                 title = ":white_check_mark: Added track"
-                description = "[${track.info.title}](${track.info.uri})"
+                description = "${track.info.hyperlink} (${track.duration.milliseconds})"
                 color = Colors.SUCCESS
             }
         }

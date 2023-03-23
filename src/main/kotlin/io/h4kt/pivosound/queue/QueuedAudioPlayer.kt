@@ -86,7 +86,8 @@ class QueuedAudioPlayer(
 
     private fun nextTrack() {
 
-        val next = queue.popOrNull() ?: return
+        val next = queue.popOrNull()
+            ?: return
 
         handle.playTrack(next)
 

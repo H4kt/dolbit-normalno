@@ -71,9 +71,9 @@ object CommandQueue : Command(
                         .position
                         .takeIf { it != 0L }
                         ?.milliseconds
-                        ?.let { " (${it})" }
+                        ?.let { " (paused at ${it})" }
 
-                    return@foldIndexed acc + "$position. $link ${ duration ?: "" }\n"
+                    return@foldIndexed acc + "$position. $link (${it.duration.milliseconds}) ${ duration ?: "" }\n"
                 }
 
             }

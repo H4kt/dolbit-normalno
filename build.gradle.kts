@@ -32,9 +32,9 @@ repositories {
 
 dependencies {
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-hocon:1.4.1")
-    implementation("com.github.walkyst:lavaplayer-fork:1.3.99.2")
-    implementation("org.slf4j:slf4j-simple:1.7.30")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-hocon:1.5.0")
+    implementation("com.github.walkyst:lavaplayer-fork:1.4.0")
+    implementation("org.slf4j:slf4j-simple:2.0.5")
 
     implementation("dev.kord:kord-core:$kordVersion") {
         capabilities {

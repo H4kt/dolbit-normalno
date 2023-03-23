@@ -89,10 +89,11 @@ class QueuedAudioPlayer(
         val next = queue.popOrNull()
             ?: return
 
+        val current = currentTrack
         handle.playTrack(next)
 
         if (repeatMode == RepeatMode.QUEUE) {
-            queue.add(next.makeClone())
+            current?.let { queue += it.makeClone() }
         }
 
     }

@@ -43,7 +43,7 @@ class QueuedAudioPlayer(
                 if (repeatMode == RepeatMode.CURRENT_TRACK) {
                     player.playTrack(track.makeClone())
                 } else {
-                    nextTrack()
+                    nextTrack(track)
                 }
 
             }
@@ -69,8 +69,9 @@ class QueuedAudioPlayer(
     }
 
     fun skip() {
+        val current = currentTrack
         handle.stopTrack()
-        nextTrack()
+        nextTrack(current)
     }
 
     fun seek(time: Long) {
@@ -84,16 +85,17 @@ class QueuedAudioPlayer(
         handle.destroy()
     }
 
-    private fun nextTrack() {
+    private fun nextTrack(
+        previousTrack: AudioTrack?
+    ) {
 
         val next = queue.popOrNull()
             ?: return
 
-        val current = currentTrack
         handle.playTrack(next)
 
         if (repeatMode == RepeatMode.QUEUE) {
-            current?.let { queue += it.makeClone() }
+            previousTrack?.let { queue += it.makeClone() }
         }
 
     }

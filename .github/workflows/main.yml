@@ -18,6 +18,7 @@ jobs:
 
       - name: 🔧 Setup Gradle
         uses: gradle/gradle-build-action@v2
+        run: chmod +x ./gradlew
 
       - name: ⚒️ Gradle build
         run: ./gradlew shadowJar --no-daemon

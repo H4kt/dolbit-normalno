@@ -51,3 +51,7 @@ tasks.withType<KotlinCompile> {
 tasks.withType<ShadowJar> {
     archiveFileName.set("pivo-sound-all.jar")
 }
+
+tasks.run.get().apply {
+    workingDir = File("run")
+}

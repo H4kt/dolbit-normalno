@@ -6,6 +6,7 @@ import dev.kord.core.event.interaction.GuildChatInputCommandInteractionCreateEve
 import dev.kord.core.on
 import dev.kord.rest.builder.interaction.GlobalChatInputCreateBuilder
 import io.h4kt.pivosound.extensions.args
+import kotlin.system.measureTimeMillis
 
 abstract class Command(
     val name: String,
@@ -18,6 +19,10 @@ abstract class Command(
     abstract suspend fun GuildChatInputCommandInteractionCreateEvent.execute()
 
     suspend fun register(kord: Kord) {
+        println("Registered command $name in ${measureTimeMillis { _register(kord) }} ms")
+    }
+
+    suspend fun _register(kord: Kord) {
 
         handle = kord.createGlobalChatInputCommand(name, description, builder)
 

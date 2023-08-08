@@ -5,25 +5,16 @@ import dev.kord.core.Kord
 import dev.kord.core.event.gateway.ReadyEvent
 import dev.kord.core.event.user.VoiceStateUpdateEvent
 import dev.kord.core.on
-import dev.kord.gateway.Event
 import dev.kord.gateway.Intent
 import dev.kord.gateway.Intents
 import dev.kord.gateway.PrivilegedIntent
-import dev.kord.rest.ratelimit.ExclusionRequestRateLimiter
-import dev.kord.rest.request.KtorRequestHandler
 import io.h4kt.pivosound.commands.*
 import io.h4kt.pivosound.config.Config
 import io.h4kt.pivosound.extensions.registerCommands
 import io.h4kt.pivosound.managers.audioPlayer
 import io.h4kt.pivosound.managers.getVoiceConnection
 import io.h4kt.pivosound.managers.unregisterVoiceConnection
-import io.ktor.client.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.plugins.logging.*
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.count
-import kotlinx.datetime.Clock
-import kotlinx.serialization.json.Json
 import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(PrivilegedIntent::class, KordVoice::class)

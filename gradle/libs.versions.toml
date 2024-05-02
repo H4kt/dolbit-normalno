@@ -8,4 +8,5 @@ slf4j = "2.0.9"
 kotlinx-serialization-hocon = { module = "org.jetbrains.kotlinx:kotlinx-serialization-hocon", version.ref = "kotlinx-serialization" }
 
 kord-extensions = { module = "com.kotlindiscord.kord.extensions:kord-extensions", version.ref = "kord-extensions" }
+lavaplayer = { module = "dev.arbjerg:lavaplayer", version = "0eaeee195f0315b2617587aa3537fa202df07ddc-SNAPSHOT" }
 slf4j = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }

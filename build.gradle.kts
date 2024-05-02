@@ -35,12 +35,10 @@ repositories {
 
 dependencies {
 
-    implementation("dev.arbjerg:lavaplayer:0eaeee195f0315b2617587aa3537fa202df07ddc-SNAPSHOT")
-//    implementation("com.github.walkyst:lavaplayer-fork:1.4.0")
-
     implementation(libs.kotlinx.serialization.hocon)
 
     implementation(libs.kord.extensions)
+    implementation(libs.lavaplayer)
     implementation(libs.slf4j)
 
 }

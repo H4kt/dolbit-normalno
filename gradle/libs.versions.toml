@@ -1,0 +1,11 @@
+[versions]
+kotlinx-serialization = "1.6.3"
+
+kord-extensions = "1.7.2-SNAPSHOT"
+slf4j = "2.0.9"
+
+[libraries]
+kotlinx-serialization-hocon = { module = "org.jetbrains.kotlinx:kotlinx-serialization-hocon", version.ref = "kotlinx-serialization" }
+
+kord-extensions = { module = "com.kotlindiscord.kord.extensions:kord-extensions", version.ref = "kord-extensions" }
+slf4j = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }

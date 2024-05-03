@@ -1,29 +1,37 @@
-name: CI
+name: deploy
 
 on:
   push:
-    branches: [master]
+    branches: ["main"]
   pull_request:
-    branches: [master]
-
-  workflow_dispatch:
+    branches: ["main"]
 
 jobs:
-  deploy:
+  publish:
+
     runs-on: ubuntu-latest
 
+    permissions:
+      packages: write
+      contents: read
+
     steps:
+      - uses: actions/checkout@v3
 
-      - uses: actions/checkout@v2
-
-      - name: 🔧 Setup Gradle
-        uses: gradle/gradle-build-action@v2
-
-      - name: 🔧 Make Gradlew runnable
-        run: chmod +x ./gradlew
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
 
       - name: ⚒️ Gradle build
-        run: ./gradlew shadowJar --no-daemon
+        uses: gradle/gradle-build-action@v2.9.0
+        with:
+          arguments: shadowJar --no-daemon
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          H4KT_REPO_USERNAME: ${{ secrets.H4KT_REPO_USERNAME }}
+          H4KT_REPO_PASSWORD: ${{ secrets.H4KT_REPO_PASSWORD }}
 
       - name: 🔧 Stop application via ssh
         uses: appleboy/ssh-action@master

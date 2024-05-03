@@ -1,5 +1,6 @@
 package dev.h4kt.pivosound.kordexExtensions
 
+import com.kotlindiscord.kord.extensions.commands.events.PublicSlashCommandInvocationEvent
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import dev.h4kt.pivosound.services.audioPlayer.AudioPlayerService
 import dev.kord.core.event.user.VoiceStateUpdateEvent
@@ -28,6 +29,10 @@ class VoiceStateWatcher : Extension() {
     override val name = "watcher:voice-state"
 
     override suspend fun setup() {
+
+        bot.on<PublicSlashCommandInvocationEvent> {
+
+        }
 
         bot.on<VoiceStateUpdateEvent> {
 

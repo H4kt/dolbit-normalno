@@ -110,10 +110,14 @@ class AudioPlayer : KordAudioProvider {
 
         }
 
-        val next = _queue.poll()
-
         currentTrack?.audioProvider?.close()
-        play(next)
+
+        val next = _queue.poll()
+        if (next != null) {
+            play(next)
+        } else {
+            this.currentTrack = null
+        }
 
     }
 

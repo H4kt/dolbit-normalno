@@ -27,7 +27,7 @@ class LavaplayerAudioProvider(
     val handle = lavaplayer.createPlayer()
 
     override val position: Duration
-        get() = handle.playingTrack.position.milliseconds
+        get() = handle.playingTrack?.position?.milliseconds ?: Duration.ZERO
 
     init {
         GlobalScope.launch {

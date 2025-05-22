@@ -1,18 +1,21 @@
 package dev.h4kt.pivosound.kordexExtensions.commands
 
+import dev.h4kt.pivosound.extensions.errorEmbed
+import dev.h4kt.pivosound.extensions.successEmbed
+import dev.h4kt.pivosound.extensions.tryRegisterToTestGuild
+import dev.h4kt.pivosound.generated.i18n.Translations
+import dev.h4kt.pivosound.services.audioPlayer.AudioPlayerService
+import dev.h4kt.pivosound.services.connectionManager.ConnectionManager
+import dev.kord.common.annotation.KordVoice
 import dev.kordex.core.extensions.Extension
 import dev.kordex.core.extensions.publicSlashCommand
 import dev.kordex.core.utils.selfMember
-import dev.h4kt.pivosound.extensions.errorEmbed
-import dev.h4kt.pivosound.extensions.successEmbed
-import dev.h4kt.pivosound.generated.i18n.Translations
-import dev.h4kt.pivosound.services.audioPlayer.AudioPlayerService
-import dev.kord.common.annotation.KordVoice
 import org.koin.core.component.inject
 
 class CommandLeave : Extension() {
 
     private val audioPlayerService by inject<AudioPlayerService>()
+    private val connectionManager by inject<ConnectionManager>()
 
     override val name = "command:leave"
 
@@ -23,36 +26,36 @@ class CommandLeave : Extension() {
             name = Translations.Commands.Leave.name
             description = Translations.Commands.Leave.description
 
+            tryRegisterToTestGuild()
+
             action {
 
                 val guild = guild
                     ?: return@action
 
                 val player = audioPlayerService.getAudioPlayer(guild.id)
-                    ?: run {
-                        respond {
-                            errorEmbed {
-                                title = ":x: Not in a voice channel"
-                            }
-                        }
-                        return@action
-                    }
+                val connection = connectionManager.getConnection(guild.id)
 
                 val channel = guild
                     .selfMember()
                     .getVoiceStateOrNull()
                     ?.getChannelOrNull()
                     ?.asChannelOrNull()
-                    ?: run {
-                        respond {
-                            errorEmbed {
-                                title = ":x: Not in a voice channel"
-                            }
-                        }
-                        return@action
-                    }
 
-                player.destroy()
+                if (channel == null || connection == null) {
+                    respond {
+                        errorEmbed {
+                            title = ":x: Not in a voice channel"
+                        }
+                    }
+                    return@action
+                }
+
+                player?.destroy()
+                connection.leave()
+
+                audioPlayerService.unregisterAudioPlayer(guild.id)
+                connectionManager.unregisterConnection(guild.id)
 
                 respond {
                     successEmbed {

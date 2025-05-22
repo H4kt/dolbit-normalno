@@ -1,22 +1,44 @@
 package dev.h4kt.pivosound.services.query
 
-import dev.kordex.core.koin.KordExKoinComponent
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
+import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
+import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import dev.h4kt.pivosound.services.query.results.LookupResult
 import dev.h4kt.pivosound.types.AudioSource
 import dev.h4kt.pivosound.types.PlayableMedia
-import org.koin.core.component.inject
+import dev.kordex.core.koin.KordExKoinComponent
+import dev.lavalink.youtube.YoutubeAudioSourceManager
+import dev.lavalink.youtube.clients.MusicWithThumbnail
+import org.koin.core.annotation.Single
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlin.time.Duration.Companion.milliseconds
 
+@Single
 class LavaplayerQueryService : QueryService, KordExKoinComponent {
 
-    private val lavaplayer by inject<AudioPlayerManager>()
+    private val lavaplayer = DefaultAudioPlayerManager()
+        .apply {
+
+            registerSourceManager(
+                SoundCloudAudioSourceManager.builder()
+                    .withAllowSearch(true)
+                    .build()
+            )
+
+            registerSourceManager(
+                YoutubeAudioSourceManager(
+                    /* allowSearch = */true,
+                    /* ...clients = */*arrayOf(
+                        MusicWithThumbnail()
+                    )
+                )
+            )
+
+        }
 
     override suspend fun lookup(
         source: AudioSource,
@@ -24,11 +46,11 @@ class LavaplayerQueryService : QueryService, KordExKoinComponent {
     ): LookupResult = suspendCoroutine {
 
         val action = when (source) {
-            AudioSource.YOUTUBE -> "ytsearch"
-            AudioSource.SOUNDCLOUD -> "scsearch"
+            AudioSource.YOUTUBE -> "ytmsearch:"
+            AudioSource.SOUNDCLOUD -> "scsearch:"
         }
 
-        lavaplayer.loadItem("$action:$term", object : AudioLoadResultHandler {
+        lavaplayer.loadItem("$action$term", object : AudioLoadResultHandler {
 
             override fun trackLoaded(track: AudioTrack) {
                 it.resume(LookupResult.Success(track.toPlayableMedia(source)))

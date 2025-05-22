@@ -4,6 +4,7 @@ import dev.kordex.core.extensions.Extension
 import dev.kordex.core.extensions.publicSlashCommand
 import dev.h4kt.pivosound.extensions.errorEmbed
 import dev.h4kt.pivosound.extensions.successEmbed
+import dev.h4kt.pivosound.extensions.tryRegisterToTestGuild
 import dev.h4kt.pivosound.generated.i18n.Translations
 import dev.h4kt.pivosound.services.audioPlayer.AudioPlayerService
 import org.koin.core.component.inject
@@ -19,6 +20,8 @@ class CommandSkip : Extension() {
 
             name = Translations.Commands.Skip.name
             description = Translations.Commands.Skip.description
+
+            tryRegisterToTestGuild()
 
             action {
 

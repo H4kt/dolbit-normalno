@@ -6,6 +6,7 @@ import dev.kordex.core.extensions.Extension
 import dev.kordex.core.extensions.publicSlashCommand
 import dev.h4kt.pivosound.extensions.errorEmbed
 import dev.h4kt.pivosound.extensions.successEmbed
+import dev.h4kt.pivosound.extensions.tryRegisterToTestGuild
 import dev.h4kt.pivosound.generated.i18n.Translations
 import dev.h4kt.pivosound.services.audioPlayer.AudioPlayerService
 import dev.h4kt.pivosound.services.audioPlayer.types.results.MoveResult
@@ -36,6 +37,8 @@ class CommandMove : Extension() {
 
             name = Translations.Commands.Move.Args.From.name
             description = Translations.Commands.Move.Args.From.description
+
+            tryRegisterToTestGuild()
 
             action {
 

@@ -2,8 +2,10 @@ package dev.h4kt.pivosound.kordexExtensions.commands
 
 import dev.h4kt.pivosound.extensions.errorEmbed
 import dev.h4kt.pivosound.extensions.successEmbed
+import dev.h4kt.pivosound.extensions.tryRegisterToTestGuild
 import dev.h4kt.pivosound.generated.i18n.Translations
 import dev.h4kt.pivosound.services.audioPlayer.AudioPlayerService
+import dev.h4kt.pivosound.services.connectionManager.ConnectionManager
 import dev.h4kt.pivosound.services.query.LavaplayerQueryService
 import dev.h4kt.pivosound.services.query.results.LookupResult
 import dev.h4kt.pivosound.types.AudioSource
@@ -11,7 +13,7 @@ import dev.h4kt.pivosound.types.PlayableMedia
 import dev.kord.common.annotation.KordVoice
 import dev.kord.core.behavior.channel.connect
 import dev.kordex.core.commands.Arguments
-import dev.kordex.core.commands.application.slash.converters.impl.stringChoice
+import dev.kordex.core.commands.application.slash.converters.impl.enumChoice
 import dev.kordex.core.commands.converters.impl.string
 import dev.kordex.core.extensions.Extension
 import dev.kordex.core.extensions.publicSlashCommand
@@ -20,15 +22,17 @@ import org.koin.core.component.inject
 class CommandPlay : Extension() {
 
     private val audioPlayerService by inject<AudioPlayerService>()
+    private val connectionManager by inject<ConnectionManager>()
     private val lavaplayerQueryService by inject<LavaplayerQueryService>()
 
     override val name = "command:play"
 
     class PlayCommandArguments : Arguments() {
 
-        val source by stringChoice {
+        val source by enumChoice<AudioSource> {
 
             name = Translations.Commands.Play.Args.Source.name
+            typeName = Translations.Commands.Play.Args.Source.typeName
             description = Translations.Commands.Play.Args.Source.description
 
             choices(AudioSource.choices())
@@ -48,20 +52,20 @@ class CommandPlay : Extension() {
             name = Translations.Commands.Play.name
             description = Translations.Commands.Play.description
 
+            tryRegisterToTestGuild()
+
             action {
 
                 val guild = guild
                     ?: return@action
 
-                val source = AudioSource.valueOf(arguments.source)
-
-                val audioSource = when (source) {
+                val audioSource = when (arguments.source) {
                     AudioSource.YOUTUBE,
                     AudioSource.SOUNDCLOUD -> lavaplayerQueryService
                 }
 
                 val result = audioSource.lookup(
-                    source = source,
+                    source = arguments.source,
                     term = arguments.query
                 )
 
@@ -105,10 +109,15 @@ class CommandPlay : Extension() {
 
                     player = audioPlayerService.createAudioPlayer(guild.id)
 
-                    channel.connect {
+                    val connection = channel.connect {
                         audioProvider = player
                         selfDeaf = true
                     }
+
+                    connectionManager.registerConnection(
+                        guildId = guild.id,
+                        connection = connection
+                    )
 
                 }
 

@@ -20,6 +20,7 @@ repositories {
     mavenCentral()
 
     maven("https://jitpack.io")
+    maven("https://maven.lavalink.dev/releases")
     maven("https://maven.lavalink.dev/snapshots")
 
 }
@@ -28,6 +29,7 @@ dependencies {
 
     implementation(libs.kotlinx.serialization.hocon)
     implementation(libs.lavaplayer)
+    implementation(libs.lavalink.youtube.v2)
     implementation(libs.slf4j)
 
     implementation(libs.koin.annotatins)
@@ -43,6 +45,9 @@ kotlin {
 }
 
 kordEx {
+
+    kordExVersion = "2.3.0-SNAPSHOT"
+    kordVersion = "0.16.0-SNAPSHOT"
 
     i18n {
         classPackage = "dev.h4kt.pivosound.generated.i18n"

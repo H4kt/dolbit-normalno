@@ -2,9 +2,12 @@ package dev.h4kt.pivosound.kordexExtensions.commands
 
 import dev.h4kt.pivosound.extensions.errorEmbed
 import dev.h4kt.pivosound.extensions.successEmbed
+import dev.h4kt.pivosound.extensions.tryRegisterToTestGuild
 import dev.h4kt.pivosound.generated.i18n.Translations
 import dev.h4kt.pivosound.services.audioPlayer.AudioPlayerService
+import dev.h4kt.pivosound.services.connectionManager.ConnectionManager
 import dev.kord.common.annotation.KordVoice
+import dev.kord.common.entity.Permission
 import dev.kord.core.behavior.channel.connect
 import dev.kordex.core.extensions.Extension
 import dev.kordex.core.extensions.publicSlashCommand
@@ -13,6 +16,7 @@ import org.koin.core.component.inject
 class CommandJoin : Extension() {
 
     private val audioPlayerService by inject<AudioPlayerService>()
+    private val connectionManager by inject<ConnectionManager>()
 
     override val name = "command:join"
 
@@ -22,6 +26,10 @@ class CommandJoin : Extension() {
 
             name = Translations.Commands.Join.name
             description = Translations.Commands.Join.description
+
+            tryRegisterToTestGuild()
+
+            requireBotPermissions(Permission.Connect)
 
             action {
 
@@ -45,10 +53,15 @@ class CommandJoin : Extension() {
 
                 val player = audioPlayerService.createAudioPlayer(guild.id)
 
-                channel.connect {
+                val connection = channel.connect {
                     audioProvider = player
                     selfDeaf = true
                 }
+
+                connectionManager.registerConnection(
+                    guildId = guild.id,
+                    connection = connection
+                )
 
                 respond {
                     successEmbed {

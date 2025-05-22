@@ -2,7 +2,9 @@ package dev.h4kt.pivosound.services.audioPlayer
 
 import dev.h4kt.pivosound.services.audioPlayer.types.AudioPlayer
 import dev.kord.common.entity.Snowflake
+import org.koin.core.annotation.Single
 
+@Single
 class DefaultAudioPlayerService : AudioPlayerService {
 
     private val audioPlayerByGuildId = mutableMapOf<Snowflake, AudioPlayer>()

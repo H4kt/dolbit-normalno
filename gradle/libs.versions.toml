@@ -8,6 +8,7 @@ shadow = "8.1.1"
 
 slf4j = "2.0.9"
 lavaplayer = "2.2.3"
+lavalink-youtube = "1.13.2"
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
@@ -21,6 +22,7 @@ kotlinx-serialization-hocon = { module = "org.jetbrains.kotlinx:kotlinx-serializ
 
 #lavaplayer = { module = "dev.arbjerg:lavaplayer", version = "0eaeee195f0315b2617587aa3537fa202df07ddc-SNAPSHOT" }
 lavaplayer = { module = "dev.arbjerg:lavaplayer", version.ref = "lavaplayer" }
+lavalink-youtube-v2 = { module = "dev.lavalink.youtube:v2", version.ref = "lavalink-youtube" }
 slf4j = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }
 koin-compiler = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koin" }
 koin-annotatins = { module = "io.insert-koin:koin-annotations", version.ref = "koin" }

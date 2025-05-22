@@ -7,7 +7,7 @@ import dev.kord.voice.VoiceConnection
 @OptIn(KordVoice::class)
 interface ConnectionManager {
 
-    fun setConnection(
+    fun registerConnection(
         guildId: Snowflake,
         connection: VoiceConnection
     )
@@ -15,5 +15,9 @@ interface ConnectionManager {
     fun getConnection(
         guildId: Snowflake
     ): VoiceConnection?
+
+    fun unregisterConnection(
+        guildId: Snowflake
+    )
 
 }

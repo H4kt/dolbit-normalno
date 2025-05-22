@@ -3,10 +3,7 @@ package dev.h4kt.pivosound
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceManager
-import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager
 import dev.h4kt.pivosound.config.ConfigModule
-import dev.h4kt.pivosound.config.appearance.AppearanceConfig
-import dev.h4kt.pivosound.config.appearance.SerializableAppearanceConfig
 import dev.h4kt.pivosound.config.discord.DiscordConfig
 import dev.h4kt.pivosound.config.discord.SerializableDiscordConfig
 import dev.h4kt.pivosound.config.sources.SerializableSourcesConfig
@@ -23,12 +20,11 @@ import dev.h4kt.pivosound.kordexExtensions.commands.CommandResume
 import dev.h4kt.pivosound.kordexExtensions.commands.CommandSeek
 import dev.h4kt.pivosound.kordexExtensions.commands.CommandSkip
 import dev.h4kt.pivosound.services.ServicesModule
-import dev.h4kt.pivosound.services.audioPlayer.AudioPlayerService
-import dev.h4kt.pivosound.services.audioPlayer.DefaultAudioPlayerService
 import dev.h4kt.pivosound.services.query.LavaplayerQueryService
 import dev.kordex.core.ExtensibleBot
 import dev.kordex.core.utils.loadModule
-import org.koin.core.context.loadKoinModules
+import dev.lavalink.youtube.YoutubeAudioSourceManager
+import dev.lavalink.youtube.clients.WebEmbeddedWithThumbnail
 import org.koin.ksp.generated.module
 
 suspend fun main() {
@@ -41,20 +37,12 @@ suspend fun main() {
         hooks {
             beforeKoinSetup {
 
-                loadKoinModules(ConfigModule().module)
-                loadKoinModules(ServicesModule().module)
-
                 loadModule(createdAtStart = true) {
-                    single<DiscordConfig> { discordConfig }
-                    single<SourcesConfig> { sourcesConfig }
-                    single<AppearanceConfig> { SerializableAppearanceConfig.load() }
-                }
 
-                loadModule {
-                    single<AudioPlayerService> { DefaultAudioPlayerService() }
-                }
-
-                loadModule(createdAtStart = true) {
+                    includes(
+                        ConfigModule().module,
+                        ServicesModule().module
+                    )
 
                     val lavaplayer: AudioPlayerManager = DefaultAudioPlayerManager()
                         .apply {
@@ -68,8 +56,11 @@ suspend fun main() {
                             registerSourceManager(
                                 YoutubeAudioSourceManager(
                                     /* allowSearch = */true,
-                                    /* email = */sourcesConfig.youtube.username,
-                                    /* password = */sourcesConfig.youtube.password
+                                    /* ...clients = */*arrayOf(
+                                        WebEmbeddedWithThumbnail()
+                                    )
+                                    /* email = *//*sourcesConfig.youtube.username,
+                                    *//* password = *//*sourcesConfig.youtube.password*/
                                 )
                             )
 
@@ -82,6 +73,8 @@ suspend fun main() {
 
             }
         }
+
+        devMode = true
 
         extensions {
 

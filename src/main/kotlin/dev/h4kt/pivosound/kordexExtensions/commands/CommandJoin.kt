@@ -9,6 +9,7 @@ import dev.h4kt.pivosound.services.connectionManager.ConnectionManager
 import dev.kord.common.annotation.KordVoice
 import dev.kord.common.entity.Permission
 import dev.kord.core.behavior.channel.connect
+import dev.kord.core.entity.channel.VoiceChannel
 import dev.kordex.core.extensions.Extension
 import dev.kordex.core.extensions.publicSlashCommand
 import org.koin.core.component.inject
@@ -29,7 +30,7 @@ class CommandJoin : Extension() {
 
             tryRegisterToTestGuild()
 
-            requireBotPermissions(Permission.Connect)
+            val selfId = kord.selfId
 
             action {
 
@@ -39,17 +40,29 @@ class CommandJoin : Extension() {
                 val member = user.fetchMemberOrNull(guild.id)
                     ?: return@action
 
-                val voiceState = member.getVoiceState()
+                val voiceState = member.getVoiceStateOrNull()
 
-                val channel = voiceState.getChannelOrNull()
-                    ?: run {
-                        respond {
-                            errorEmbed {
-                                title = ":x: You are not in a voice channel"
-                            }
+                val channel = voiceState?.getChannelOrNull() as? VoiceChannel
+                if (channel == null) {
+                    respond {
+                        errorEmbed {
+                            title = ":x: You are not in a voice channel"
+                            description = "Or I don't have permission to see the channel you're in"
                         }
-                        return@action
                     }
+                    return@action
+                }
+
+                val permissions = channel.getEffectivePermissions(selfId)
+                if (Permission.Connect !in permissions) {
+                    respond {
+                        errorEmbed {
+                            title = ":x: Unable to join"
+                            description = "I don't have permission to join your channel"
+                        }
+                    }
+                    return@action
+                }
 
                 val player = audioPlayerService.createAudioPlayer(guild.id)
 

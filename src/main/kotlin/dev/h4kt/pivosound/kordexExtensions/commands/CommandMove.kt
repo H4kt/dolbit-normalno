@@ -1,11 +1,12 @@
 package dev.h4kt.pivosound.kordexExtensions.commands
 
-import com.kotlindiscord.kord.extensions.commands.Arguments
-import com.kotlindiscord.kord.extensions.commands.converters.impl.int
-import com.kotlindiscord.kord.extensions.extensions.Extension
-import com.kotlindiscord.kord.extensions.extensions.publicSlashCommand
+import dev.kordex.core.commands.Arguments
+import dev.kordex.core.commands.converters.impl.int
+import dev.kordex.core.extensions.Extension
+import dev.kordex.core.extensions.publicSlashCommand
 import dev.h4kt.pivosound.extensions.errorEmbed
 import dev.h4kt.pivosound.extensions.successEmbed
+import dev.h4kt.pivosound.generated.i18n.Translations
 import dev.h4kt.pivosound.services.audioPlayer.AudioPlayerService
 import dev.h4kt.pivosound.services.audioPlayer.types.results.MoveResult
 import org.koin.core.component.inject
@@ -19,13 +20,13 @@ class CommandMove : Extension() {
     class MoveCommandArguments : Arguments() {
 
         val from by int {
-            name = "from"
-            description = "Position to move from"
+            name = Translations.Commands.Move.Args.From.name
+            description = Translations.Commands.Move.Args.From.description
         }
 
         val to by int {
-            name = "to"
-            description = "Position to move to"
+            name = Translations.Commands.Move.Args.To.name
+            description = Translations.Commands.Move.Args.To.description
         }
 
     }
@@ -33,8 +34,8 @@ class CommandMove : Extension() {
     override suspend fun setup() {
         publicSlashCommand(::MoveCommandArguments) {
 
-            name = "move"
-            description = "Move a track to another position"
+            name = Translations.Commands.Move.Args.From.name
+            description = Translations.Commands.Move.Args.From.description
 
             action {
 

@@ -1,11 +1,10 @@
 package dev.h4kt.pivosound
 
-import com.kotlindiscord.kord.extensions.ExtensibleBot
-import com.kotlindiscord.kord.extensions.utils.loadModule
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager
+import dev.h4kt.pivosound.config.ConfigModule
 import dev.h4kt.pivosound.config.appearance.AppearanceConfig
 import dev.h4kt.pivosound.config.appearance.SerializableAppearanceConfig
 import dev.h4kt.pivosound.config.discord.DiscordConfig
@@ -13,10 +12,24 @@ import dev.h4kt.pivosound.config.discord.SerializableDiscordConfig
 import dev.h4kt.pivosound.config.sources.SerializableSourcesConfig
 import dev.h4kt.pivosound.config.sources.SourcesConfig
 import dev.h4kt.pivosound.kordexExtensions.VoiceStateWatcher
-import dev.h4kt.pivosound.kordexExtensions.commands.*
+import dev.h4kt.pivosound.kordexExtensions.commands.CommandJoin
+import dev.h4kt.pivosound.kordexExtensions.commands.CommandLeave
+import dev.h4kt.pivosound.kordexExtensions.commands.CommandMove
+import dev.h4kt.pivosound.kordexExtensions.commands.CommandPause
+import dev.h4kt.pivosound.kordexExtensions.commands.CommandPlay
+import dev.h4kt.pivosound.kordexExtensions.commands.CommandQueue
+import dev.h4kt.pivosound.kordexExtensions.commands.CommandRepeat
+import dev.h4kt.pivosound.kordexExtensions.commands.CommandResume
+import dev.h4kt.pivosound.kordexExtensions.commands.CommandSeek
+import dev.h4kt.pivosound.kordexExtensions.commands.CommandSkip
+import dev.h4kt.pivosound.services.ServicesModule
 import dev.h4kt.pivosound.services.audioPlayer.AudioPlayerService
 import dev.h4kt.pivosound.services.audioPlayer.DefaultAudioPlayerService
 import dev.h4kt.pivosound.services.query.LavaplayerQueryService
+import dev.kordex.core.ExtensibleBot
+import dev.kordex.core.utils.loadModule
+import org.koin.core.context.loadKoinModules
+import org.koin.ksp.generated.module
 
 suspend fun main() {
 
@@ -27,6 +40,9 @@ suspend fun main() {
 
         hooks {
             beforeKoinSetup {
+
+                loadKoinModules(ConfigModule().module)
+                loadKoinModules(ServicesModule().module)
 
                 loadModule(createdAtStart = true) {
                     single<DiscordConfig> { discordConfig }

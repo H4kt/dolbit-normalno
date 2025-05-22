@@ -1,9 +1,10 @@
 package dev.h4kt.pivosound.kordexExtensions.commands
 
-import com.kotlindiscord.kord.extensions.extensions.Extension
-import com.kotlindiscord.kord.extensions.extensions.publicSlashCommand
+import dev.kordex.core.extensions.Extension
+import dev.kordex.core.extensions.publicSlashCommand
 import dev.h4kt.pivosound.extensions.errorEmbed
 import dev.h4kt.pivosound.extensions.infoEmbed
+import dev.h4kt.pivosound.generated.i18n.Translations
 import dev.h4kt.pivosound.services.audioPlayer.AudioPlayerService
 import dev.h4kt.pivosound.types.RepeatMode
 import org.koin.core.component.inject
@@ -18,8 +19,8 @@ class CommandQueue : Extension() {
     override suspend fun setup() {
         publicSlashCommand {
 
-            name = "queue"
-            description = "View track queue"
+            name = Translations.Commands.Queue.name
+            description = Translations.Commands.Queue.description
 
             action {
 

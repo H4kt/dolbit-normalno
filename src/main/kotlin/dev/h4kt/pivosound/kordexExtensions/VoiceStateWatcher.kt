@@ -1,9 +1,9 @@
 package dev.h4kt.pivosound.kordexExtensions
 
-import com.kotlindiscord.kord.extensions.commands.events.PublicSlashCommandInvocationEvent
-import com.kotlindiscord.kord.extensions.extensions.Extension
 import dev.h4kt.pivosound.services.audioPlayer.AudioPlayerService
 import dev.kord.core.event.user.VoiceStateUpdateEvent
+import dev.kordex.core.commands.events.PublicSlashCommandInvocationEvent
+import dev.kordex.core.extensions.Extension
 import org.koin.core.component.inject
 
 class VoiceStateWatcher : Extension() {

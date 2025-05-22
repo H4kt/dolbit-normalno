@@ -1,11 +1,12 @@
 package dev.h4kt.pivosound.kordexExtensions.commands
 
-import com.kotlindiscord.kord.extensions.commands.Arguments
-import com.kotlindiscord.kord.extensions.commands.converters.impl.string
-import com.kotlindiscord.kord.extensions.extensions.Extension
-import com.kotlindiscord.kord.extensions.extensions.publicSlashCommand
+import dev.kordex.core.commands.Arguments
+import dev.kordex.core.commands.converters.impl.string
+import dev.kordex.core.extensions.Extension
+import dev.kordex.core.extensions.publicSlashCommand
 import dev.h4kt.pivosound.extensions.errorEmbed
 import dev.h4kt.pivosound.extensions.successEmbed
+import dev.h4kt.pivosound.generated.i18n.Translations
 import dev.h4kt.pivosound.services.audioPlayer.AudioPlayerService
 import org.koin.core.component.inject
 import kotlin.time.Duration
@@ -18,16 +19,16 @@ class CommandSeek : Extension() {
 
     class SeekCommandArguments : Arguments() {
         val position by string {
-            name = "position"
-            description = "Where to skip to"
+            name = Translations.Commands.Seek.Args.Position.name
+            description = Translations.Commands.Seek.Args.Position.description
         }
     }
 
     override suspend fun setup() {
         publicSlashCommand(::SeekCommandArguments) {
 
-            name = "seek"
-            description = "Fast forward/rewind current song to a specific time"
+            name = Translations.Commands.Seek.name
+            description = Translations.Commands.Seek.description
 
             action {
 

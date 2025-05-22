@@ -1,10 +1,11 @@
 package dev.h4kt.pivosound.kordexExtensions.commands
 
-import com.kotlindiscord.kord.extensions.extensions.Extension
-import com.kotlindiscord.kord.extensions.extensions.publicSlashCommand
-import com.kotlindiscord.kord.extensions.utils.selfMember
+import dev.kordex.core.extensions.Extension
+import dev.kordex.core.extensions.publicSlashCommand
+import dev.kordex.core.utils.selfMember
 import dev.h4kt.pivosound.extensions.errorEmbed
 import dev.h4kt.pivosound.extensions.successEmbed
+import dev.h4kt.pivosound.generated.i18n.Translations
 import dev.h4kt.pivosound.services.audioPlayer.AudioPlayerService
 import dev.kord.common.annotation.KordVoice
 import org.koin.core.component.inject
@@ -19,8 +20,8 @@ class CommandLeave : Extension() {
     override suspend fun setup() {
         publicSlashCommand {
 
-            name = "leave"
-            description = "Request the bot to leave it's current voice channel"
+            name = Translations.Commands.Leave.name
+            description = Translations.Commands.Leave.description
 
             action {
 

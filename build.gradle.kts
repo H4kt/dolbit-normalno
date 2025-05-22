@@ -1,62 +1,67 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
 
-    application
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlinx.serialization)
 
-    kotlin("jvm") version "1.9.23"
-    kotlin("plugin.serialization") version "1.9.23"
-
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    alias(libs.plugins.kordex)
+    alias(libs.plugins.shadow)
 
 }
-
-val kordVersion: String by project
 
 group = "dev.h4kt"
 version = "2.0.0"
 
-application {
-    mainClass.set("dev.h4kt.pivosound.AppKt")
-}
-
 repositories {
 
     mavenCentral()
-    google()
 
     maven("https://jitpack.io")
     maven("https://maven.lavalink.dev/snapshots")
-    maven("https://oss.sonatype.org/content/repositories/snapshots")
-    maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
 
 }
 
 dependencies {
 
     implementation(libs.kotlinx.serialization.hocon)
-
-    implementation(libs.kord.extensions)
     implementation(libs.lavaplayer)
     implementation(libs.slf4j)
+
+    implementation(libs.koin.annotatins)
+    ksp(libs.koin.compiler)
 
 }
 
 kotlin {
     compilerOptions {
+        jvmTarget = JvmTarget.JVM_21
         freeCompilerArgs = listOf("-Xcontext-receivers")
     }
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "21"
+kordEx {
+
+    i18n {
+        classPackage = "dev.h4kt.pivosound.generated.i18n"
+        translationBundle = "english.strings"
+    }
+
+    bot {
+        mainClass = "dev.h4kt.pivosound.AppKt"
+        voice = true
+    }
+
 }
 
 tasks.withType<ShadowJar> {
     archiveFileName.set("pivo-sound-all.jar")
 }
 
-tasks.run.get().apply {
-    workingDir = File("run")
+afterEvaluate {
+    tasks["run"].apply {
+        (this as JavaExec).workingDir = File("run")
+    }
 }

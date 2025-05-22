@@ -1,12 +1,8 @@
 package dev.h4kt.pivosound.kordexExtensions.commands
 
-import com.kotlindiscord.kord.extensions.commands.Arguments
-import com.kotlindiscord.kord.extensions.commands.application.slash.converters.impl.stringChoice
-import com.kotlindiscord.kord.extensions.commands.converters.impl.string
-import com.kotlindiscord.kord.extensions.extensions.Extension
-import com.kotlindiscord.kord.extensions.extensions.publicSlashCommand
 import dev.h4kt.pivosound.extensions.errorEmbed
 import dev.h4kt.pivosound.extensions.successEmbed
+import dev.h4kt.pivosound.generated.i18n.Translations
 import dev.h4kt.pivosound.services.audioPlayer.AudioPlayerService
 import dev.h4kt.pivosound.services.query.LavaplayerQueryService
 import dev.h4kt.pivosound.services.query.results.LookupResult
@@ -14,6 +10,11 @@ import dev.h4kt.pivosound.types.AudioSource
 import dev.h4kt.pivosound.types.PlayableMedia
 import dev.kord.common.annotation.KordVoice
 import dev.kord.core.behavior.channel.connect
+import dev.kordex.core.commands.Arguments
+import dev.kordex.core.commands.application.slash.converters.impl.stringChoice
+import dev.kordex.core.commands.converters.impl.string
+import dev.kordex.core.extensions.Extension
+import dev.kordex.core.extensions.publicSlashCommand
 import org.koin.core.component.inject
 
 class CommandPlay : Extension() {
@@ -27,15 +28,15 @@ class CommandPlay : Extension() {
 
         val source by stringChoice {
 
-            name = "source"
-            description = "Where to source the song from"
+            name = Translations.Commands.Play.Args.Source.name
+            description = Translations.Commands.Play.Args.Source.description
 
             choices(AudioSource.choices())
         }
 
         val query by string {
-            name = "query"
-            description = "Name of the song to play"
+            name = Translations.Commands.Play.Args.Query.name
+            description = Translations.Commands.Play.Args.Query.description
         }
 
     }
@@ -44,8 +45,8 @@ class CommandPlay : Extension() {
     override suspend fun setup() {
         publicSlashCommand(::PlayCommandArguments) {
 
-            name = "play"
-            description = "Request the bot to play a song"
+            name = Translations.Commands.Play.name
+            description = Translations.Commands.Play.description
 
             action {
 

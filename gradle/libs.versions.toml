@@ -1,12 +1,26 @@
 [versions]
+kotlin = "2.1.21"
+ksp = "2.1.21-2.0.1"
 kotlinx-serialization = "1.6.3"
+kordex-plugin = "1.6.1"
+koin = "2.0.0"
+shadow = "8.1.1"
 
-kord-extensions = "1.7.2-SNAPSHOT"
 slf4j = "2.0.9"
+lavaplayer = "2.2.3"
+
+[plugins]
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kordex = { id = "dev.kordex.gradle.kordex", version.ref = "kordex-plugin" }
+shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
 
 [libraries]
 kotlinx-serialization-hocon = { module = "org.jetbrains.kotlinx:kotlinx-serialization-hocon", version.ref = "kotlinx-serialization" }
 
-kord-extensions = { module = "com.kotlindiscord.kord.extensions:kord-extensions", version.ref = "kord-extensions" }
-lavaplayer = { module = "dev.arbjerg:lavaplayer", version = "0eaeee195f0315b2617587aa3537fa202df07ddc-SNAPSHOT" }
+#lavaplayer = { module = "dev.arbjerg:lavaplayer", version = "0eaeee195f0315b2617587aa3537fa202df07ddc-SNAPSHOT" }
+lavaplayer = { module = "dev.arbjerg:lavaplayer", version.ref = "lavaplayer" }
 slf4j = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }
+koin-compiler = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koin" }
+koin-annotatins = { module = "io.insert-koin:koin-annotations", version.ref = "koin" }

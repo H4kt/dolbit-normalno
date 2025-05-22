@@ -1,11 +1,12 @@
 package dev.h4kt.pivosound.kordexExtensions.commands
 
-import com.kotlindiscord.kord.extensions.commands.Arguments
-import com.kotlindiscord.kord.extensions.commands.application.slash.converters.impl.stringChoice
-import com.kotlindiscord.kord.extensions.extensions.Extension
-import com.kotlindiscord.kord.extensions.extensions.publicSlashCommand
+import dev.kordex.core.commands.Arguments
+import dev.kordex.core.commands.application.slash.converters.impl.stringChoice
+import dev.kordex.core.extensions.Extension
+import dev.kordex.core.extensions.publicSlashCommand
 import dev.h4kt.pivosound.extensions.errorEmbed
 import dev.h4kt.pivosound.extensions.successEmbed
+import dev.h4kt.pivosound.generated.i18n.Translations
 import dev.h4kt.pivosound.services.audioPlayer.AudioPlayerService
 import dev.h4kt.pivosound.services.query.LavaplayerQueryService
 import dev.h4kt.pivosound.types.RepeatMode
@@ -21,8 +22,8 @@ class CommandRepeat : Extension() {
     class RepeatCommandArguments : Arguments() {
         val mode by stringChoice {
 
-            name = "mode"
-            description = "Repeat mode"
+            name = Translations.Commands.Repeat.Args.Mode.name
+            description = Translations.Commands.Repeat.Args.Mode.description
 
             choices(RepeatMode.choices())
         }
@@ -31,8 +32,8 @@ class CommandRepeat : Extension() {
     override suspend fun setup() {
         publicSlashCommand(::RepeatCommandArguments) {
 
-            name = "repeat"
-            description = "Sets repeat mode for current server"
+            name = Translations.Commands.Repeat.name
+            description = Translations.Commands.Repeat.description
 
             action {
 

@@ -1,12 +1,13 @@
 package dev.h4kt.pivosound.kordexExtensions.commands
 
-import com.kotlindiscord.kord.extensions.extensions.Extension
-import com.kotlindiscord.kord.extensions.extensions.publicSlashCommand
 import dev.h4kt.pivosound.extensions.errorEmbed
 import dev.h4kt.pivosound.extensions.successEmbed
+import dev.h4kt.pivosound.generated.i18n.Translations
 import dev.h4kt.pivosound.services.audioPlayer.AudioPlayerService
 import dev.kord.common.annotation.KordVoice
 import dev.kord.core.behavior.channel.connect
+import dev.kordex.core.extensions.Extension
+import dev.kordex.core.extensions.publicSlashCommand
 import org.koin.core.component.inject
 
 class CommandJoin : Extension() {
@@ -19,8 +20,8 @@ class CommandJoin : Extension() {
     override suspend fun setup() {
         publicSlashCommand {
 
-            name = "join"
-            description = "Request the bot to join your current channel"
+            name = Translations.Commands.Join.name
+            description = Translations.Commands.Join.description
 
             action {
 

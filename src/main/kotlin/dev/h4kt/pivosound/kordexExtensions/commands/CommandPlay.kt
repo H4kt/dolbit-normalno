@@ -13,7 +13,6 @@ import dev.h4kt.pivosound.types.PlayableMedia
 import dev.kord.common.annotation.KordVoice
 import dev.kord.core.behavior.channel.connect
 import dev.kordex.core.commands.Arguments
-import dev.kordex.core.commands.application.slash.converters.impl.enumChoice
 import dev.kordex.core.commands.converters.impl.string
 import dev.kordex.core.extensions.Extension
 import dev.kordex.core.extensions.publicSlashCommand
@@ -29,14 +28,14 @@ class CommandPlay : Extension() {
 
     class PlayCommandArguments : Arguments() {
 
-        val source by enumChoice<AudioSource> {
-
-            name = Translations.Commands.Play.Args.Source.name
-            typeName = Translations.Commands.Play.Args.Source.typeName
-            description = Translations.Commands.Play.Args.Source.description
-
-            choices(AudioSource.choices())
-        }
+//        val source by enumChoice<AudioSource> {
+//
+//            name = Translations.Commands.Play.Args.Source.name
+//            typeName = Translations.Commands.Play.Args.Source.typeName
+//            description = Translations.Commands.Play.Args.Source.description
+//
+//            choices(AudioSource.choices())
+//        }
 
         val query by string {
             name = Translations.Commands.Play.Args.Query.name
@@ -59,13 +58,13 @@ class CommandPlay : Extension() {
                 val guild = guild
                     ?: return@action
 
-                val audioSource = when (arguments.source) {
-                    AudioSource.YOUTUBE,
-                    AudioSource.SOUNDCLOUD -> lavaplayerQueryService
-                }
+//                val audioSource = when (arguments.source) {
+//                    AudioSource.YOUTUBE,
+//                    AudioSource.SOUNDCLOUD -> lavaplayerQueryService
+//                }
 
-                val result = audioSource.lookup(
-                    source = arguments.source,
+                val result = lavaplayerQueryService.lookup(
+                    source = AudioSource.YOUTUBE,
                     term = arguments.query
                 )
 

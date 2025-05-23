@@ -6,9 +6,8 @@ import dev.h4kt.pivosound.extensions.tryRegisterToTestGuild
 import dev.h4kt.pivosound.generated.i18n.Translations
 import dev.h4kt.pivosound.services.audioPlayer.AudioPlayerService
 import dev.h4kt.pivosound.services.connectionManager.ConnectionManager
-import dev.h4kt.pivosound.services.query.LavaplayerQueryService
+import dev.h4kt.pivosound.services.query.QueryService
 import dev.h4kt.pivosound.services.query.results.LookupResult
-import dev.h4kt.pivosound.types.AudioSource
 import dev.h4kt.pivosound.types.PlayableMedia
 import dev.kord.common.annotation.KordVoice
 import dev.kord.core.behavior.channel.connect
@@ -22,26 +21,15 @@ class CommandPlay : Extension() {
 
     private val audioPlayerService by inject<AudioPlayerService>()
     private val connectionManager by inject<ConnectionManager>()
-    private val lavaplayerQueryService by inject<LavaplayerQueryService>()
+    private val queryService by inject<QueryService>()
 
     override val name = "command:play"
 
     class PlayCommandArguments : Arguments() {
-
-//        val source by enumChoice<AudioSource> {
-//
-//            name = Translations.Commands.Play.Args.Source.name
-//            typeName = Translations.Commands.Play.Args.Source.typeName
-//            description = Translations.Commands.Play.Args.Source.description
-//
-//            choices(AudioSource.choices())
-//        }
-
         val query by string {
             name = Translations.Commands.Play.Args.Query.name
             description = Translations.Commands.Play.Args.Query.description
         }
-
     }
 
     @OptIn(KordVoice::class)
@@ -58,14 +46,8 @@ class CommandPlay : Extension() {
                 val guild = guild
                     ?: return@action
 
-//                val audioSource = when (arguments.source) {
-//                    AudioSource.YOUTUBE,
-//                    AudioSource.SOUNDCLOUD -> lavaplayerQueryService
-//                }
-
-                val result = lavaplayerQueryService.lookup(
-                    source = AudioSource.YOUTUBE,
-                    term = arguments.query
+                val result = queryService.lookup(
+                    query = arguments.query
                 )
 
                 val (media) = when (result) {
@@ -120,29 +102,39 @@ class CommandPlay : Extension() {
 
                 }
 
-                if (player.queue.isEmpty()) {
+                when (media) {
+                    is PlayableMedia.Track -> {
 
-                    respond {
-                        successEmbed {
-                            title = ":white_check_mark: Now playing"
-                            description = "[${media.title} (${media.duration})](${media.url})"
+                        if (player.queue.isEmpty()) {
+                            respond {
+                                successEmbed {
+                                    title = ":white_check_mark: Now playing"
+                                    description = media.hyperlink()
+                                }
+                            }
+                        } else {
+                            respond {
+                                successEmbed {
+                                    title = ":white_check_mark: Added to queue"
+                                    description = media.hyperlink()
+                                }
+                            }
+                        }
+
+                    }
+                    is PlayableMedia.Playlist -> {
+                        respond {
+                            successEmbed {
+                                title = ":white_check_mark: Added ${media.tracks.size} tracks"
+                                description = media.hyperlink()
+                            }
                         }
                     }
-
-                } else {
-
-                    respond {
-                        successEmbed {
-                            title = ":white_check_mark: Added to queue"
-                            description = "[${media.title} (${media.duration})](${media.url})"
-                        }
-                    }
-
                 }
 
                 when (media) {
-                    is PlayableMedia.Playlist -> media.tracks.forEach(player::queue)
-                    is PlayableMedia.Track -> player.queue(media)
+                    is PlayableMedia.Playlist -> media.tracks.forEach(player::enqueue)
+                    is PlayableMedia.Track -> player.enqueue(media)
                 }
 
             }

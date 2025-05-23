@@ -5,7 +5,7 @@ import dev.h4kt.pivosound.types.PlayableMedia
 import kotlin.time.Duration
 
 class PlayingTrack(
-    val info: PlayableMedia.Track,
+    val track: PlayableMedia.Track,
     val audioProvider: AudioProvider
 ) {
 

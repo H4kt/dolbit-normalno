@@ -1,8 +1,0 @@
-discord {
-  token = ""
-}
-
-youtube {
-  username = ""
-  password = ""
-}

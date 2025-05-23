@@ -32,6 +32,10 @@ dependencies {
     implementation(libs.lavalink.youtube.v2)
     implementation(libs.slf4j)
 
+    implementation(libs.google.api.client)
+    implementation(libs.google.oauth.client)
+    implementation(libs.google.api.services)
+
     implementation(libs.koin.annotatins)
     ksp(libs.koin.compiler)
 

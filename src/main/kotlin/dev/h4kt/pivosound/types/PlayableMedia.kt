@@ -1,34 +1,32 @@
 package dev.h4kt.pivosound.types
 
-import kotlin.time.Duration
+sealed interface PlayableMedia {
 
-sealed class PlayableMedia {
+    val id: String
+    val title: String
+    val author: String
+    val url: String
+    val thumbnailUrl: String
 
-    abstract val title: String
-    abstract val duration: Duration
-    abstract val url: String?
-
-    data class Track(
-        override val title: String,
-        override val duration: Duration,
-        override val url: String?,
-        val id: String,
-        val author: String,
-        val source: AudioSource
-    ) : PlayableMedia() {
-
-        fun hyperlink(): String {
-            return "[$title ($duration)]($url)"
-        }
-
+    fun hyperlink(): String {
+        return "[$author - $title]($url)"
     }
 
-    data class Playlist(
+    data class Track(
+        override val id: String,
         override val title: String,
-        override val duration: Duration,
-        override val url: String?,
-        val tracks: List<Track>,
-        val source: AudioSource
-    ) : PlayableMedia()
+        override val author: String,
+        override val url: String,
+        override val thumbnailUrl: String
+    ) : PlayableMedia
+
+    data class Playlist(
+        override val id: String,
+        override val title: String,
+        override val author: String,
+        override val url: String,
+        override val thumbnailUrl: String,
+        val tracks: List<Track>
+    ) : PlayableMedia
 
 }

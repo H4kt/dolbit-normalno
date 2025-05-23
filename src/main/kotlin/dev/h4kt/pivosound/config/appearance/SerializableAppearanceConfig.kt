@@ -10,8 +10,8 @@ data class SerializableAppearanceConfig(
 
     companion object : ConfigFactory<AppearanceConfig>("appearance.conf") {
 
-        override fun load(path: String): AppearanceConfig {
-            return deserialize<SerializableAppearanceConfig>(path)
+        override fun load(fileName: String): AppearanceConfig {
+            return deserialize<SerializableAppearanceConfig>(fileName)
         }
 
     }

@@ -71,15 +71,15 @@ class CommandSeek : Extension() {
                         return@action
                     }
 
-                if (track.info.duration < position) {
-                    respond {
-                        errorEmbed {
-                            title = ":x: Invalid position"
-                            description = "Position must be between 0s and ${track.info.duration}"
-                        }
-                    }
-                    return@action
-                }
+//                if (track.track.duration < position) {
+//                    respond {
+//                        errorEmbed {
+//                            title = ":x: Invalid position"
+//                            description = "Position must be between 0s and ${track.track.duration}"
+//                        }
+//                    }
+//                    return@action
+//                }
 
                 val positionBefore = track.position
                 player.seek(position)

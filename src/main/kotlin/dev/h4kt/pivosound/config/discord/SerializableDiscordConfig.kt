@@ -12,8 +12,8 @@ data class SerializableDiscordConfig(
 
     companion object : ConfigFactory<DiscordConfig>("discord.conf") {
 
-        override fun load(path: String): DiscordConfig {
-            return deserialize<SerializableDiscordConfig>(path)
+        override fun load(fileName: String): DiscordConfig {
+            return deserialize<SerializableDiscordConfig>(fileName)
         }
 
     }

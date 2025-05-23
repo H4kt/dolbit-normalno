@@ -2,7 +2,6 @@ package dev.h4kt.pivosound.services.audioPlayer.types
 
 import dev.h4kt.pivosound.services.audioPlayer.types.results.MoveResult
 import dev.h4kt.pivosound.services.audioSource.LavaplayerAudioProvider
-import dev.h4kt.pivosound.types.AudioSource
 import dev.h4kt.pivosound.types.PlayableMedia
 import dev.h4kt.pivosound.types.RepeatMode
 import dev.kord.common.annotation.KordVoice
@@ -29,22 +28,13 @@ class AudioPlayer : KordAudioProvider {
     }
 
     fun play(track: PlayableMedia.Track) {
-
-        val audioProvider = when (track.source) {
-            AudioSource.YOUTUBE,
-            AudioSource.SOUNDCLOUD ->
-                LavaplayerAudioProvider(track)
-                    .apply { onEnd(::onTrackEnd) }
-        }
-
         currentTrack = PlayingTrack(
-            info = track,
-            audioProvider = audioProvider
+            track = track,
+            audioProvider = LavaplayerAudioProvider(track)
         )
-
     }
 
-    fun queue(track: PlayableMedia.Track) {
+    fun enqueue(track: PlayableMedia.Track) {
 
         if (currentTrack == null) {
             play(track)
@@ -100,12 +90,12 @@ class AudioPlayer : KordAudioProvider {
         if (currentTrack != null) {
 
             if (repeatMode == RepeatMode.CURRENT_TRACK) {
-                play(currentTrack.info)
+                play(currentTrack.track)
                 return
             }
 
             if (repeatMode == RepeatMode.QUEUE) {
-                _queue.push(currentTrack.info)
+                _queue.push(currentTrack.track)
             }
 
         }

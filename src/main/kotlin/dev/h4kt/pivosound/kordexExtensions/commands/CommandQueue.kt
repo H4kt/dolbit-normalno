@@ -63,7 +63,7 @@ class CommandQueue : Extension() {
                         }
 
                         title = ":loud_sound: Current track @ ${currentTrack.position.inWholeSeconds.seconds} $repeatIcon"
-                        description = currentTrack.info.hyperlink()
+                        description = currentTrack.track.hyperlink()
 
                     }
 

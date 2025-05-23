@@ -10,6 +10,9 @@ slf4j = "2.0.9"
 lavaplayer = "2.2.3"
 lavalink-youtube = "1.13.2"
 
+google-api = "1.23.0"
+google-api-services = "v3-rev222-1.25.0"
+
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
@@ -26,3 +29,7 @@ lavalink-youtube-v2 = { module = "dev.lavalink.youtube:v2", version.ref = "laval
 slf4j = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }
 koin-compiler = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koin" }
 koin-annotatins = { module = "io.insert-koin:koin-annotations", version.ref = "koin" }
+
+google-api-client = { module = "com.google.api-client:google-api-client", version.ref = "google-api" }
+google-oauth-client = { module = "com.google.oauth-client:google-oauth-client-jetty", version.ref = "google-api" }
+google-api-services = { module = "com.google.apis:google-api-services-youtube", version.ref = "google-api-services" }

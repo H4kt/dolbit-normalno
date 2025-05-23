@@ -1,8 +1,7 @@
 package dev.h4kt.pivosound.services.audioSource
 
-import dev.kordex.core.koin.KordExKoinComponent
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
+import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.player.event.TrackEndEvent
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
@@ -10,19 +9,27 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import dev.h4kt.pivosound.types.PlayableMedia
 import dev.kord.common.annotation.KordVoice
 import dev.kord.voice.AudioFrame
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import org.koin.core.component.inject
+import dev.lavalink.youtube.YoutubeAudioSourceManager
+import dev.lavalink.youtube.clients.WebEmbeddedWithThumbnail
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(KordVoice::class)
 class LavaplayerAudioProvider(
     override val track: PlayableMedia.Track
-) : AudioProvider, KordExKoinComponent {
+) : AudioProvider {
 
-    private val lavaplayer by inject<AudioPlayerManager>()
+    private val lavaplayer = DefaultAudioPlayerManager()
+        .apply {
+            registerSourceManager(
+                YoutubeAudioSourceManager(
+                    /* allowSearch = */false,
+                    /* ...clients = */*arrayOf(
+                        WebEmbeddedWithThumbnail()
+                    )
+                )
+            )
+        }
 
     val handle = lavaplayer.createPlayer()
 
@@ -30,28 +37,24 @@ class LavaplayerAudioProvider(
         get() = handle.playingTrack?.position?.milliseconds ?: Duration.ZERO
 
     init {
-        GlobalScope.launch {
-            runBlocking {
-                lavaplayer.loadItem(track.id, object : AudioLoadResultHandler {
+        lavaplayer.loadItem(track.id, object : AudioLoadResultHandler {
 
-                    override fun trackLoaded(track: AudioTrack) {
-                        handle.playTrack(track)
-                    }
-
-                    override fun playlistLoaded(playlist: AudioPlaylist) {
-                        handle.playTrack(playlist.tracks.firstOrNull())
-                    }
-
-                    override fun noMatches() {
-                        handle.stopTrack()
-                    }
-
-                    override fun loadFailed(exception: FriendlyException) {
-                        handle.stopTrack()
-                    }
-                })
+            override fun trackLoaded(track: AudioTrack) {
+                handle.playTrack(track)
             }
-        }
+
+            override fun playlistLoaded(playlist: AudioPlaylist) {
+                handle.playTrack(playlist.tracks.firstOrNull())
+            }
+
+            override fun noMatches() {
+                handle.stopTrack()
+            }
+
+            override fun loadFailed(exception: FriendlyException) {
+                handle.stopTrack()
+            }
+        })
     }
 
     override fun pause() {

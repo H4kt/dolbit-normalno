@@ -4,12 +4,12 @@ import kotlinx.serialization.Serializable
 
 interface SourcesConfig {
 
-    @Serializable
-    data class UsernamePasswordCredentials(
-        val username: String? = null,
-        val password: String? = null
-    )
+    val youtube: YouTubeSourceConfig
 
-    val youtube: UsernamePasswordCredentials
+    @Serializable
+    data class YouTubeSourceConfig(
+        val applicationName: String,
+        val clientSecretsFile: String
+    )
 
 }

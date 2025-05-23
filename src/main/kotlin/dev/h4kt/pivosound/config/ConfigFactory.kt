@@ -7,19 +7,19 @@ import java.io.File
 import com.typesafe.config.ConfigFactory as HoconConfigFactory
 
 abstract class ConfigFactory<T : Any>(
-    protected val defaultPath: String,
+    protected val defaultFileName: String,
     protected val format: SerialFormat = Hocon {}
 ) {
 
     abstract fun load(
-        path: String = defaultPath
+        fileName: String = defaultFileName
     ): T
 
     @OptIn(ExperimentalSerializationApi::class)
     protected inline fun <reified T : Any> deserialize(
-        path: String
+        fileName: String
     ): T {
-        val file = File(path)
+        val file = File("config/$fileName")
         return when (format) {
             is Hocon -> {
                 val config = HoconConfigFactory.parseFile(file)

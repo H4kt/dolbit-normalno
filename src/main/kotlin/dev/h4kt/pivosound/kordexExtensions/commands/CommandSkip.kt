@@ -38,7 +38,8 @@ class CommandSkip : Extension() {
                         return@action
                     }
 
-                if (player.currentTrack == null) {
+                val currentTrack = player.currentTrack
+                if (currentTrack == null) {
                     respond {
                         errorEmbed {
                             title = ":x: Nothing is playing"
@@ -48,17 +49,14 @@ class CommandSkip : Extension() {
                     return@action
                 }
 
-                player.skip()
-
                 respond {
                     successEmbed {
-                        title = ":white_check_mark: Skipped"
-                        description = player.currentTrack
-                            ?.info
-                            ?.let { "Now playing [${it.title} (${it.duration})](${it.url})" }
-                            ?: "Nothing to play next"
+                        title = ":white_check_mark: Skipped track"
+                        description = currentTrack.track.hyperlink()
                     }
                 }
+
+                player.skip()
 
             }
         }

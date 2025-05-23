@@ -6,7 +6,7 @@ sealed interface PlayableMedia {
     val title: String
     val author: String
     val url: String
-    val thumbnailUrl: String
+    val thumbnailUrl: String?
 
     fun hyperlink(): String {
         return "[$author - $title]($url)"
@@ -17,7 +17,7 @@ sealed interface PlayableMedia {
         override val title: String,
         override val author: String,
         override val url: String,
-        override val thumbnailUrl: String
+        override val thumbnailUrl: String?
     ) : PlayableMedia
 
     data class Playlist(
@@ -25,7 +25,7 @@ sealed interface PlayableMedia {
         override val title: String,
         override val author: String,
         override val url: String,
-        override val thumbnailUrl: String,
+        override val thumbnailUrl: String?,
         val tracks: List<Track>
     ) : PlayableMedia
 

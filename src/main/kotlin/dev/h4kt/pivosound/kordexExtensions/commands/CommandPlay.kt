@@ -65,6 +65,9 @@ class CommandPlay : Extension() {
                             errorEmbed {
                                 title = ":x: No results found"
                                 description = "Maybe you should be more specific?"
+                                thumbnail {
+                                    this.url
+                                }
                             }
                         }
                         return@action

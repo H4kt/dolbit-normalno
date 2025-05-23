@@ -44,6 +44,10 @@ class AudioPlayer : KordAudioProvider {
 
     }
 
+    fun remove(index: Int): PlayableMedia.Track {
+        return _queue.removeAt(index)
+    }
+
     fun pause() {
         currentTrack?.audioProvider?.pause()
     }

@@ -65,9 +65,6 @@ class CommandPlay : Extension() {
                             errorEmbed {
                                 title = ":x: No results found"
                                 description = "Maybe you should be more specific?"
-                                thumbnail {
-                                    this.url
-                                }
                             }
                         }
                         return@action
@@ -113,6 +110,7 @@ class CommandPlay : Extension() {
                                 successEmbed {
                                     title = ":white_check_mark: Now playing"
                                     description = media.hyperlink()
+                                    image = media.thumbnailUrl
                                 }
                             }
                         } else {
@@ -120,6 +118,7 @@ class CommandPlay : Extension() {
                                 successEmbed {
                                     title = ":white_check_mark: Added to queue"
                                     description = media.hyperlink()
+                                    image = media.thumbnailUrl
                                 }
                             }
                         }
@@ -130,6 +129,7 @@ class CommandPlay : Extension() {
                             successEmbed {
                                 title = ":white_check_mark: Added ${media.tracks.size} tracks"
                                 description = media.hyperlink()
+                                image = media.thumbnailUrl
                             }
                         }
                     }

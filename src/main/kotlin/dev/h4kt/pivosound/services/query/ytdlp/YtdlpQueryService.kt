@@ -12,6 +12,7 @@ import kotlinx.serialization.json.decodeFromStream
 import org.koin.core.annotation.Single
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
+import kotlin.time.Duration.Companion.seconds
 
 @Single
 class YtdlpQueryService : QueryService {
@@ -59,6 +60,7 @@ class YtdlpQueryService : QueryService {
                     id = result.id,
                     title = result.title,
                     author = result.channel,
+                    duration = result.duration.seconds,
                     url = "https://youtube.com/watch?v=${result.id}",
                     thumbnailUrl = result.thumbnailUrl
                 )
@@ -78,6 +80,7 @@ class YtdlpQueryService : QueryService {
                         id = item.id,
                         title = item.title,
                         author = item.channel,
+                        duration = item.duration.seconds,
                         url = "https://youtube.com/watch?v=${item.id}",
                         thumbnailUrl = item.thumbnailUrl
                     )
@@ -95,6 +98,7 @@ class YtdlpQueryService : QueryService {
                                 id = item.id,
                                 title = item.title,
                                 author = item.channel,
+                                duration = item.duration.seconds,
                                 url = "https://youtube.com/watch?v=${item.id}&list=${result.id}&index=${index.inc()}",
                                 thumbnailUrl = item.thumbnailUrl
                             )

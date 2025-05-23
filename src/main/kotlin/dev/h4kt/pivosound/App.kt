@@ -10,6 +10,7 @@ import dev.h4kt.pivosound.kordexExtensions.commands.CommandMove
 import dev.h4kt.pivosound.kordexExtensions.commands.CommandPause
 import dev.h4kt.pivosound.kordexExtensions.commands.CommandPlay
 import dev.h4kt.pivosound.kordexExtensions.commands.CommandQueue
+import dev.h4kt.pivosound.kordexExtensions.commands.CommandRemove
 import dev.h4kt.pivosound.kordexExtensions.commands.CommandRepeat
 import dev.h4kt.pivosound.kordexExtensions.commands.CommandResume
 import dev.h4kt.pivosound.kordexExtensions.commands.CommandSeek
@@ -49,6 +50,7 @@ suspend fun main() {
             add(::CommandMove)
             add(::CommandSkip)
             add(::CommandQueue)
+            add(::CommandRemove)
             add(::CommandRepeat)
 
         }

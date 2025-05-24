@@ -11,5 +11,5 @@ data class PlaylistMetadata(
     val channel: String? = null,
     @SerialName("thumbnail")
     val thumbnailUrl: String? = null,
-    val entries: List<PlaylistEntry>
+    val entries: List<PlaylistEntry?>
 ) : YtdlpOutput

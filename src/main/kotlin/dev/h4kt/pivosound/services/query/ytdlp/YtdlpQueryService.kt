@@ -75,6 +75,10 @@ class YtdlpQueryService : QueryService {
                 if (!isExactUrl) {
 
                     val item = result.entries.first()
+                    if (item == null) {
+                        continuation.resume(LookupResult.NoResults)
+                        return@suspendCoroutine
+                    }
 
                     PlayableMedia.Track(
                         id = item.id,
@@ -93,16 +97,18 @@ class YtdlpQueryService : QueryService {
                         author = result.channel ?: "unknown",
                         url = "https://youtube.com/playlist?list=${result.id}",
                         thumbnailUrl = result.thumbnailUrl,
-                        tracks = result.entries.mapIndexed { index, item ->
-                            PlayableMedia.Track(
-                                id = item.id,
-                                title = item.title,
-                                author = item.channel,
-                                duration = item.duration.seconds,
-                                url = "https://youtube.com/watch?v=${item.id}&list=${result.id}&index=${index.inc()}",
-                                thumbnailUrl = item.thumbnailUrl
-                            )
-                        }
+                        tracks = result.entries
+                            .filterNotNull()
+                            .mapIndexed { index, item ->
+                                PlayableMedia.Track(
+                                    id = item.id,
+                                    title = item.title,
+                                    author = item.channel,
+                                    duration = item.duration.seconds,
+                                    url = "https://youtube.com/watch?v=${item.id}&list=${result.id}&index=${index.inc()}",
+                                    thumbnailUrl = item.thumbnailUrl
+                                )
+                            }
                     )
 
                 }

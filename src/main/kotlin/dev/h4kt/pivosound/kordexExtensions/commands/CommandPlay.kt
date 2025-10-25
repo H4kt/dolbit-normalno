@@ -127,7 +127,7 @@ class CommandPlay : Extension() {
                     is PlayableMedia.Playlist -> {
                         respond {
                             successEmbed {
-                                title = ":white_check_mark: Added ${media.tracks.size} tracks"
+                                title = ":white_check_mark: Added ${media.tracks.size} tracks from"
                                 description = media.hyperlink()
                                 image = media.thumbnailUrl
                             }

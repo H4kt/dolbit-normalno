@@ -10,6 +10,8 @@ import dev.h4kt.pivosound.types.PlayableMedia
 import dev.kord.common.annotation.KordVoice
 import dev.kord.voice.AudioFrame
 import dev.lavalink.youtube.YoutubeAudioSourceManager
+import dev.lavalink.youtube.YoutubeSourceOptions
+import dev.lavalink.youtube.clients.WebEmbedded
 import dev.lavalink.youtube.clients.WebEmbeddedWithThumbnail
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
@@ -21,12 +23,21 @@ class LavaplayerAudioProvider(
 
     private val lavaplayer = DefaultAudioPlayerManager()
         .apply {
+
+            val options = YoutubeSourceOptions()
+                .setAllowSearch(false)
+                .setAllowDirectVideoIds(true)
+                .setAllowDirectPlaylistIds(true)
+                .setRemoteCipher(
+                    /* remoteCipherUrl = */"http://localhost:8001",
+                    /* remoteCipherPassword = */null,
+                    /* remoteCipherUserAgent = */"pivo-sound",
+                )
+
             registerSourceManager(
                 YoutubeAudioSourceManager(
-                    /* allowSearch = */false,
-                    /* ...clients = */*arrayOf(
-                        WebEmbeddedWithThumbnail()
-                    )
+                    /* options = */options,
+                    /* ...clients = */WebEmbedded()
                 )
             )
         }

@@ -20,6 +20,10 @@ abstract class ConfigFactory<T : Any>(
         fileName: String
     ): T {
         val file = File("config/$fileName")
+        if (!file.exists()) {
+            error("Config file config/$fileName does not exist")
+        }
+
         return when (format) {
             is Hocon -> {
                 val config = HoconConfigFactory.parseFile(file)

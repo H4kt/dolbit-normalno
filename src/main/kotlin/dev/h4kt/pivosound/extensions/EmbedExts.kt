@@ -7,36 +7,36 @@ import dev.kord.rest.builder.message.embed
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-context(MessageBuilder, KoinComponent)
+context(builderContext: MessageBuilder, koin: KoinComponent)
 inline fun errorEmbed(builder: EmbedBuilder.() -> Unit) {
 
-    val appearance by inject<AppearanceConfig>()
+    val appearance by koin.inject<AppearanceConfig>()
 
-    embed {
+    builderContext.embed {
         apply(builder)
         color = appearance.colors.error
     }
 
 }
 
-context(MessageBuilder, KoinComponent)
+context(builderContext: MessageBuilder, koin: KoinComponent)
 inline fun infoEmbed(builder: EmbedBuilder.() -> Unit) {
 
-    val appearance by inject<AppearanceConfig>()
+    val appearance by koin.inject<AppearanceConfig>()
 
-    embed {
+    builderContext.embed {
         apply(builder)
         color = appearance.colors.info
     }
 
 }
 
-context(MessageBuilder, KoinComponent)
+context(builderContext: MessageBuilder, koin: KoinComponent)
 inline fun successEmbed(builder: EmbedBuilder.() -> Unit) {
 
-    val appearance by inject<AppearanceConfig>()
+    val appearance by koin.inject<AppearanceConfig>()
 
-    embed {
+    builderContext.embed {
         apply(builder)
         color = appearance.colors.success
     }

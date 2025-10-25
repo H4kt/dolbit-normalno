@@ -24,47 +24,41 @@ jobs:
           java-version: '21'
           distribution: 'corretto'
 
-      - name: 🔧 Make gradle runnable
-        run: chmod +x ./gradlew
+      - name: 🔧 Setup Gradle
+        uses: gradle/actions/setup-gradle@v5
 
       - name: ⚒️ Gradle build
-        uses: gradle/gradle-build-action@v2.9.0
-        with:
-          arguments: shadowJar --no-daemon
+        run: ./gradlew shadowJar --no-daemon
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           H4KT_REPO_USERNAME: ${{ secrets.H4KT_REPO_USERNAME }}
           H4KT_REPO_PASSWORD: ${{ secrets.H4KT_REPO_PASSWORD }}
 
-      - name: 🔧 Stop application via ssh
+      - name: 🔧 Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: 🔑 Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: ⚒️ Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64
+          push: true
+          tags: ghcr.io/h4kt/pivo-sound:latest
+
+      - name: 🔧 Restart application
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            export NVM_DIR=~/.nvm
-            source ~/.nvm/nvm.sh
-            pm2 stop pivo-sound
-
-      - name: 📂 Upload artifact to the server
-        uses: SamKirkland/FTP-Deploy-Action@4.3.3
-        with:
-          server: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          local-dir: ./build/libs/
-          server-dir: ./pivo-sound/
-          exclude: |
-            "**-*.*.*.jar"
-
-      - name: 🔧 Start application via ssh
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          script: |
-            export NVM_DIR=~/.nvm
-            source ~/.nvm/nvm.sh
-            pm2 start pivo-sound
+            cd ~/pivo-sound
+            docker compose pull app
+            docker compose up -d

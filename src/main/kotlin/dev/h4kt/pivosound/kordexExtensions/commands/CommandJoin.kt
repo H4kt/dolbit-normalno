@@ -64,6 +64,9 @@ class CommandJoin : Extension() {
                     return@action
                 }
 
+                audioPlayerService.unregisterAudioPlayer(guild.id)?.destroy()
+                connectionManager.unregisterConnection(guild.id)
+
                 val player = audioPlayerService.createAudioPlayer(guild.id)
 
                 val connection = channel.connect {

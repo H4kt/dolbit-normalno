@@ -1,13 +1,13 @@
 package dev.h4kt.pivosound.kordexExtensions.commands
 
-import dev.kordex.core.extensions.Extension
-import dev.kordex.core.extensions.publicSlashCommand
 import dev.h4kt.pivosound.extensions.errorEmbed
 import dev.h4kt.pivosound.extensions.infoEmbed
 import dev.h4kt.pivosound.extensions.tryRegisterToTestGuild
 import dev.h4kt.pivosound.generated.i18n.Translations
 import dev.h4kt.pivosound.services.audioPlayer.AudioPlayerService
 import dev.h4kt.pivosound.types.RepeatMode
+import dev.kordex.core.extensions.Extension
+import dev.kordex.core.extensions.publicSlashCommand
 import org.koin.core.component.inject
 import kotlin.time.Duration.Companion.seconds
 
@@ -47,7 +47,6 @@ class CommandQueue : Extension() {
                     respond {
                         errorEmbed {
                             title = ":x: Nothing is playing"
-                            description = "Perhaps you can ask me to play something?"
                         }
                     }
                     return@action
@@ -67,21 +66,37 @@ class CommandQueue : Extension() {
 
                     }
 
+                    val repeatIcon = when {
+                        player.repeatMode == RepeatMode.QUEUE -> ":repeat:"
+                        else -> ""
+                    }
+
+                    if (queue.isEmpty()) {
+                        infoEmbed {
+                            title = ":notepad_spiral: Queue $repeatIcon"
+                            description = ":x: Queue is empty"
+                        }
+                        return@respond
+                    }
+
+                    val chunkSize = 10
+                    val chunkedQueue = player.queue.chunked(chunkSize)
+
                     infoEmbed {
-
-                        val repeatIcon = when {
-                            player.repeatMode == RepeatMode.CURRENT_TRACK -> ":repeat:"
-                            else -> ""
-                        }
-
                         title = ":notepad_spiral: Queue $repeatIcon"
-                        description = when {
-                            queue.isNotEmpty() ->
-                                queue.mapIndexed { index, track -> "${index.inc()}. ${track.hyperlink()}" }
-                                    .joinToString("\n")
-                            else -> ":x: Queue is empty"
-                        }
+                        description = chunkedQueue.first()
+                            .mapIndexed { index, track -> "${index.inc()}. ${track.hyperlink()}" }
+                            .joinToString("\n")
 
+                    }
+
+                    chunkedQueue.drop(1).forEachIndexed { chunkIndex, chunk ->
+                        infoEmbed {
+                            description = chunk
+                                .mapIndexed { index, track -> "${index.inc() + ((chunkIndex + 1) * chunkSize)}. ${track.hyperlink()}" }
+                                .joinToString("\n")
+
+                        }
                     }
 
                 }

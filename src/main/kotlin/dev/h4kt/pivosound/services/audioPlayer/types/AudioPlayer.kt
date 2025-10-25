@@ -28,9 +28,14 @@ class AudioPlayer : KordAudioProvider {
     }
 
     fun play(track: PlayableMedia.Track) {
+
+        val audioProvider = LavaplayerAudioProvider(track).apply {
+            onEnd { onTrackEnd() }
+        }
+
         currentTrack = PlayingTrack(
             track = track,
-            audioProvider = LavaplayerAudioProvider(track)
+            audioProvider = audioProvider
         )
     }
 

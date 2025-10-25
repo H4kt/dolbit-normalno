@@ -1,0 +1,7 @@
+services:
+  ejs-api:
+    image: ghcr.io/kikkia/yt-cipher:master
+    container_name: ejs_signature_api
+    ports:
+      - "8001:8001"
+    restart: unless-stopped

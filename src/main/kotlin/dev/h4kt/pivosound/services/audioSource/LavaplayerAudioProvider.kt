@@ -6,6 +6,7 @@ import com.sedmelluq.discord.lavaplayer.player.event.TrackEndEvent
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
+import dev.h4kt.pivosound.config.sources.SourcesConfig
 import dev.h4kt.pivosound.types.PlayableMedia
 import dev.kord.common.annotation.KordVoice
 import dev.kord.voice.AudioFrame
@@ -13,11 +14,16 @@ import dev.lavalink.youtube.YoutubeAudioSourceManager
 import dev.lavalink.youtube.YoutubeSourceOptions
 import dev.lavalink.youtube.clients.WebEmbedded
 import dev.lavalink.youtube.clients.WebEmbeddedWithThumbnail
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.InjectedParam
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
+@Factory
 @OptIn(KordVoice::class)
 class LavaplayerAudioProvider(
+    val config: SourcesConfig,
+    @InjectedParam
     override val track: PlayableMedia.Track
 ) : AudioProvider {
 
@@ -29,8 +35,8 @@ class LavaplayerAudioProvider(
                 .setAllowDirectVideoIds(true)
                 .setAllowDirectPlaylistIds(true)
                 .setRemoteCipher(
-                    /* remoteCipherUrl = */"http://localhost:8001",
-                    /* remoteCipherPassword = */null,
+                    /* remoteCipherUrl = */config.youtube.remoteCipherUrl,
+                    /* remoteCipherPassword = */config.youtube.remoteCipherPassword,
                     /* remoteCipherUserAgent = */"pivo-sound",
                 )
 

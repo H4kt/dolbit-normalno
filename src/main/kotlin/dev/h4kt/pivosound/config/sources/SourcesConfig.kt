@@ -7,7 +7,7 @@ interface SourcesConfig {
     @Serializable
     data class YouTube(
         val remoteCipherUrl: String,
-        val remoteCipherPassword: String
+        val remoteCipherPassword: String? = null
     )
 
     val youtube: YouTube

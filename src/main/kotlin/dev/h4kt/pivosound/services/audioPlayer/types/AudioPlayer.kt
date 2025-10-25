@@ -6,12 +6,15 @@ import dev.h4kt.pivosound.types.PlayableMedia
 import dev.h4kt.pivosound.types.RepeatMode
 import dev.kord.common.annotation.KordVoice
 import dev.kord.voice.AudioFrame
+import dev.kordex.core.koin.KordExKoinComponent
+import org.koin.core.component.inject
+import org.koin.core.parameter.parametersOf
 import java.util.*
 import kotlin.time.Duration
 import dev.kord.voice.AudioProvider as KordAudioProvider
 
 @OptIn(KordVoice::class)
-class AudioPlayer : KordAudioProvider {
+class AudioPlayer : KordAudioProvider, KordExKoinComponent {
 
     private val _queue = LinkedList<PlayableMedia.Track>()
 
@@ -29,8 +32,12 @@ class AudioPlayer : KordAudioProvider {
 
     fun play(track: PlayableMedia.Track) {
 
-        val audioProvider = LavaplayerAudioProvider(track).apply {
-            onEnd { onTrackEnd() }
+        val audioProvider by inject<LavaplayerAudioProvider> {
+            parametersOf(track)
+        }
+
+        audioProvider.onEnd {
+            onTrackEnd()
         }
 
         currentTrack = PlayingTrack(

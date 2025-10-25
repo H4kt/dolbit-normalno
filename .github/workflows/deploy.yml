@@ -60,5 +60,6 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
             cd ~/pivo-sound
+            docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
             docker compose pull app
             docker compose up -d

@@ -89,9 +89,7 @@ tasks.withType<ShadowJar> {
     isZip64 = true
     archiveFileName = "pivo-sound-all.jar"
 
-    manifest {
-        attributes("Multi-Release" to "true")
-    }
+    mergeServiceFiles()
 }
 
 tasks.test {

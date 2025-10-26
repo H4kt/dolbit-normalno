@@ -1,0 +1,4 @@
+root = true
+
+[src/main/resources/translations/**/*.properties]
+charset = utf-8

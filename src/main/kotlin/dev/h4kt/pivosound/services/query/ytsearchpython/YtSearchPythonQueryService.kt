@@ -72,7 +72,6 @@ class YtSearchPythonQueryService : QueryService {
         }
 
         val result = try {
-            println(rawResult)
             json.decodeFromString<List<YtSearchPythonOutput>>(rawResult).firstOrNull()
         } catch (ex: Exception) {
             logger.error("Failed to parse youtube_meta.py output", ex)

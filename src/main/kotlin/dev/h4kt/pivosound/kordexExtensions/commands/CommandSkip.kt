@@ -6,7 +6,11 @@ import dev.h4kt.pivosound.extensions.errorEmbed
 import dev.h4kt.pivosound.extensions.successEmbed
 import dev.h4kt.pivosound.extensions.tryRegisterToTestGuild
 import dev.h4kt.pivosound.generated.i18n.Translations
+import dev.h4kt.pivosound.kordexExtensions.commands.CommandSkip.SkipCommandArguments
 import dev.h4kt.pivosound.services.audioPlayer.AudioPlayerService
+import dev.kordex.core.commands.Arguments
+import dev.kordex.core.commands.converters.impl.defaultingInt
+import dev.kordex.core.commands.converters.impl.int
 import org.koin.core.component.inject
 
 class CommandSkip : Extension() {
@@ -15,8 +19,17 @@ class CommandSkip : Extension() {
 
     override val name = "command:skip"
 
+    class SkipCommandArguments : Arguments() {
+        val count by defaultingInt {
+            name = Translations.Commands.Skip.Args.Count.name
+            description = Translations.Commands.Skip.Args.Count.description
+            minValue = 1
+            defaultValue = 1
+        }
+    }
+
     override suspend fun setup() {
-        publicSlashCommand {
+        publicSlashCommand(::SkipCommandArguments) {
 
             name = Translations.Commands.Skip.name
             description = Translations.Commands.Skip.description
@@ -49,14 +62,23 @@ class CommandSkip : Extension() {
                     return@action
                 }
 
-                respond {
-                    successEmbed {
-                        title = ":white_check_mark: Skipped track"
-                        description = currentTrack.track.hyperlink()
+                if (arguments.count == 1) {
+                    respond {
+                        successEmbed {
+                            title = ":white_check_mark: Skipped track"
+                            description = currentTrack.track.hyperlink()
+                        }
+                    }
+                } else {
+                    respond {
+                        successEmbed {
+                            title = ":white_check_mark: Skipped ${arguments.count} tracks"
+                        }
                     }
                 }
 
-                player.skip()
+
+                player.skip(arguments.count)
 
             }
         }

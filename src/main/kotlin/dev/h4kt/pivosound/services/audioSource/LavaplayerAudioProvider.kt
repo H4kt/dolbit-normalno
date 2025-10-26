@@ -6,6 +6,7 @@ import com.sedmelluq.discord.lavaplayer.player.event.TrackEndEvent
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
+import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason
 import dev.h4kt.pivosound.config.sources.SourcesConfig
 import dev.h4kt.pivosound.types.PlayableMedia
 import dev.kord.common.annotation.KordVoice
@@ -92,7 +93,7 @@ class LavaplayerAudioProvider(
 
     override fun onEnd(listener: () -> Unit) {
         handle.addListener {
-            if (it is TrackEndEvent) {
+            if (it is TrackEndEvent && it.endReason == AudioTrackEndReason.FINISHED) {
                 listener()
             }
         }

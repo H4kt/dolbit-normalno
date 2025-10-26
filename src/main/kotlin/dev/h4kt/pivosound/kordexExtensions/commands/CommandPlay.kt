@@ -1,6 +1,7 @@
 package dev.h4kt.pivosound.kordexExtensions.commands
 
 import dev.h4kt.pivosound.extensions.errorEmbed
+import dev.h4kt.pivosound.extensions.infoEmbed
 import dev.h4kt.pivosound.extensions.successEmbed
 import dev.h4kt.pivosound.extensions.tryRegisterToTestGuild
 import dev.h4kt.pivosound.generated.i18n.Translations
@@ -46,13 +47,20 @@ class CommandPlay : Extension() {
                 val guild = guild
                     ?: return@action
 
+                respond {
+                    infoEmbed {
+                        title = ":mag: Searching for"
+                        description = arguments.query
+                    }
+                }
+
                 val result = queryService.lookup(
                     query = arguments.query
                 )
 
                 val (media) = when (result) {
                     LookupResult.Error -> {
-                        respond {
+                        edit {
                             errorEmbed {
                                 title = ":x: An error occurred while searching for song"
                                 description = "Please try again in a moment"
@@ -61,7 +69,7 @@ class CommandPlay : Extension() {
                         return@action
                     }
                     LookupResult.NoResults -> {
-                        respond {
+                        edit {
                             errorEmbed {
                                 title = ":x: No results found"
                                 description = "Maybe you should be more specific?"
@@ -78,15 +86,17 @@ class CommandPlay : Extension() {
                     val channel = user.asMemberOrNull(guild.id)
                         ?.getVoiceStateOrNull()
                         ?.getChannelOrNull()
-                        ?: run {
-                            respond {
-                                errorEmbed {
-                                    title = ":x: Not in a voice channel"
-                                    description = "Perhaps you can join one"
-                                }
+
+                    if (channel == null) {
+                        edit {
+                            errorEmbed {
+                                title = ":x: Not in a voice channel"
+                                description = "Perhaps you can join one"
                             }
-                            return@action
                         }
+
+                        return@action
+                    }
 
                     player = audioPlayerService.createAudioPlayer(guild.id)
 
@@ -106,7 +116,7 @@ class CommandPlay : Extension() {
                     is PlayableMedia.Track -> {
 
                         if (player.queue.isEmpty()) {
-                            respond {
+                            edit {
                                 successEmbed {
                                     title = ":white_check_mark: Now playing"
                                     description = media.hyperlink()
@@ -114,7 +124,7 @@ class CommandPlay : Extension() {
                                 }
                             }
                         } else {
-                            respond {
+                            edit {
                                 successEmbed {
                                     title = ":white_check_mark: Added to queue"
                                     description = media.hyperlink()
@@ -125,7 +135,7 @@ class CommandPlay : Extension() {
 
                     }
                     is PlayableMedia.Playlist -> {
-                        respond {
+                        edit {
                             successEmbed {
                                 title = ":white_check_mark: Added ${media.tracks.size} tracks from"
                                 description = media.hyperlink()

@@ -1,7 +1,8 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
+
+    application
 
     alias(libs.plugins.kotlin)
     alias(libs.plugins.ksp)
@@ -9,6 +10,8 @@ plugins {
 
     alias(libs.plugins.kordex)
     alias(libs.plugins.shadow)
+
+    alias(libs.plugins.graalvm.python)
 
 }
 
@@ -27,52 +30,80 @@ repositories {
 
 dependencies {
 
+    implementation(libs.kotlinx.datetime)
     implementation(libs.kotlinx.serialization.hocon)
     implementation(libs.lavaplayer)
     implementation(libs.lavalink.youtube.v2)
     implementation(libs.slf4j)
 
-    implementation(libs.google.api.client)
-    implementation(libs.google.oauth.client)
-    implementation(libs.google.api.services)
+    implementation(libs.graalvm.polyglot)
+    implementation(libs.graalvm.polyglot.python)
 
     implementation(libs.koin.annotatins)
     ksp(libs.koin.compiler)
 
+    testImplementation(kotlin("test"))
+}
+
+application {
+    mainClass = "dev.h4kt.pivosound.AppKt"
 }
 
 kotlin {
     compilerOptions {
-        jvmTarget = JvmTarget.JVM_21
+        jvmToolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+            vendor = JvmVendorSpec.GRAAL_VM
+        }
 
         freeCompilerArgs.addAll(
             "-Xdata-flow-based-exhaustiveness",
-            "-Xcontext-sensetive-resolution",
+            "-Xcontext-sensitive-resolution",
             "-Xcontext-parameters"
         )
     }
 }
 
-kordEx {
+graalPy {
+    packages = setOf(
+        "pytube",
+        "youtube-search-python",
+        "requests"
+    )
 
+    community = true
+}
+
+kordEx {
     i18n {
         classPackage = "dev.h4kt.pivosound.generated.i18n"
         translationBundle = "english.strings"
     }
 
     bot {
-        mainClass = "dev.h4kt.pivosound.AppKt"
         voice = true
     }
-
 }
 
 tasks.withType<ShadowJar> {
-    archiveFileName.set("pivo-sound-all.jar")
+    isZip64 = true
+    archiveFileName = "pivo-sound-all.jar"
+
+    manifest {
+        attributes("Multi-Release" to "true")
+    }
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 afterEvaluate {
-    tasks["run"].apply {
-        (this as JavaExec).workingDir = File("run")
+    tasks.named<JavaExec>("run") {
+        workingDir = File("run")
+    }
+
+    tasks.named<JavaExec>("runShadow") {
+        workingDir = File("run")
     }
 }

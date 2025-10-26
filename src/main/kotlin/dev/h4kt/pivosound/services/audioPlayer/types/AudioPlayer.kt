@@ -10,6 +10,7 @@ import dev.kordex.core.koin.KordExKoinComponent
 import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
 import java.util.*
+import kotlin.math.min
 import kotlin.time.Duration
 import dev.kord.voice.AudioProvider as KordAudioProvider
 
@@ -88,8 +89,16 @@ class AudioPlayer : KordAudioProvider, KordExKoinComponent {
         return MoveResult.Success(track)
     }
 
-    fun skip() {
-        onTrackEnd()
+    fun skip(count: Int = 1) {
+        if (count > 1) {
+            val removeCount = min(_queue.size, count - 1)
+
+            repeat(removeCount) {
+                _queue.poll()
+            }
+        }
+
+        playNextTrack()
     }
 
     fun seek(duration: Duration) {
@@ -116,13 +125,19 @@ class AudioPlayer : KordAudioProvider, KordExKoinComponent {
 
         }
 
+        playNextTrack()
+
+    }
+
+    private fun playNextTrack() {
+
         currentTrack?.audioProvider?.close()
 
         val next = _queue.poll()
         if (next != null) {
             play(next)
         } else {
-            this.currentTrack = null
+            currentTrack = null
         }
 
     }

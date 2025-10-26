@@ -1,17 +1,16 @@
 [versions]
 kotlin = "2.2.21"
 ksp = "2.3.0"
+kotlinx-datetime = "0.7.1"
 kotlinx-serialization = "1.6.3"
 kordex-plugin = "1.7.4"
 koin = "2.0.0"
 shadow = "8.1.1"
+graalvm-polyglot = "25.0.0"
 
 slf4j = "2.0.9"
 lavaplayer = "2.2.3"
 lavalink-youtube = "1.15.0"
-
-google-api = "1.23.0"
-google-api-services = "v3-rev222-1.25.0"
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
@@ -19,8 +18,10 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kordex = { id = "dev.kordex.gradle.kordex", version.ref = "kordex-plugin" }
 shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
+graalvm-python = { id = "org.graalvm.python", version.ref = "graalvm-polyglot" }
 
 [libraries]
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 kotlinx-serialization-hocon = { module = "org.jetbrains.kotlinx:kotlinx-serialization-hocon", version.ref = "kotlinx-serialization" }
 
 #lavaplayer = { module = "dev.arbjerg:lavaplayer", version = "0eaeee195f0315b2617587aa3537fa202df07ddc-SNAPSHOT" }
@@ -30,6 +31,5 @@ slf4j = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }
 koin-compiler = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koin" }
 koin-annotatins = { module = "io.insert-koin:koin-annotations", version.ref = "koin" }
 
-google-api-client = { module = "com.google.api-client:google-api-client", version.ref = "google-api" }
-google-oauth-client = { module = "com.google.oauth-client:google-oauth-client-jetty", version.ref = "google-api" }
-google-api-services = { module = "com.google.apis:google-api-services-youtube", version.ref = "google-api-services" }
+graalvm-polyglot = { module = "org.graalvm.polyglot:polyglot", version.ref = "graalvm-polyglot" }
+graalvm-polyglot-python = { module = "org.graalvm.polyglot:python", version.ref = "graalvm-polyglot" }

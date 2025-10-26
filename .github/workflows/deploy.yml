@@ -50,7 +50,7 @@ jobs:
           context: .
           platforms: linux/amd64
           push: true
-          tags: ghcr.io/h4kt/pivo-sound:latest
+          tags: ghcr.io/h4kt/dolbit-normalno:latest
 
       - name: 🔧 Restart application
         uses: appleboy/ssh-action@master

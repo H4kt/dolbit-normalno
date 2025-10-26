@@ -15,7 +15,9 @@ import dev.h4kt.pivosound.kordexExtensions.commands.CommandRepeat
 import dev.h4kt.pivosound.kordexExtensions.commands.CommandResume
 import dev.h4kt.pivosound.kordexExtensions.commands.CommandSeek
 import dev.h4kt.pivosound.kordexExtensions.commands.CommandSkip
+import dev.h4kt.pivosound.kordexExtensions.commands.CommandTest
 import dev.h4kt.pivosound.services.ServicesModule
+import dev.kord.common.entity.PresenceStatus
 import dev.kordex.core.ExtensibleBot
 import dev.kordex.core.utils.loadModule
 import org.koin.ksp.generated.module
@@ -41,6 +43,8 @@ suspend fun main() {
 
             add(::VoiceStateWatcher)
 
+//            add(::CommandTest)
+
             add(::CommandJoin)
             add(::CommandLeave)
             add(::CommandPlay)
@@ -53,6 +57,11 @@ suspend fun main() {
             add(::CommandRemove)
             add(::CommandRepeat)
 
+        }
+
+        presence {
+            status = PresenceStatus.Online
+            listening("your commands")
         }
 
     }

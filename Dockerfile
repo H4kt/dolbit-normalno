@@ -1,10 +1,5 @@
 FROM ghcr.io/graalvm/jdk-community:21
 ENV LANG=C.UTF-8
-#RUN apk update
-#RUN apk add python3 curl
-#RUN curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp
-#RUN chmod a+rx /usr/local/bin/yt-dlp
-#RUN mkdir /home/app
-COPY ./build/libs/pivo-sound-all.jar /home/app/pivo-sound.jar
+COPY ./build/libs/dolbit-normalno-all.jar /home/app/dolbit-normalno.jar
 WORKDIR /home/app
-CMD ["java", "-jar", "pivo-sound.jar"]
+CMD ["java", "-jar", "dolbit-normalno.jar"]

@@ -1,0 +1,19 @@
+package dev.h4kt.dolbitnormalno.config.appearance
+
+import dev.h4kt.dolbitnormalno.config.ConfigFactory
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class SerializableAppearanceConfig(
+    override val colors: AppearanceConfig.Colors
+) : AppearanceConfig {
+
+    companion object : ConfigFactory<AppearanceConfig>("appearance.conf") {
+
+        override fun load(fileName: String): AppearanceConfig {
+            return deserialize<SerializableAppearanceConfig>(fileName)
+        }
+
+    }
+
+}

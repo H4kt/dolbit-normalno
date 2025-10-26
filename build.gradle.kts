@@ -46,7 +46,7 @@ dependencies {
 }
 
 application {
-    mainClass = "dev.h4kt.pivosound.AppKt"
+    mainClass = "dev.h4kt.dolbitnormalno.AppKt"
 }
 
 kotlin {
@@ -76,7 +76,7 @@ graalPy {
 
 kordEx {
     i18n {
-        classPackage = "dev.h4kt.pivosound.generated.i18n"
+        classPackage = "dev.h4kt.dolbitnormalno.generated.i18n"
         translationBundle = "english.strings"
     }
 
@@ -87,7 +87,7 @@ kordEx {
 
 tasks.withType<ShadowJar> {
     isZip64 = true
-    archiveFileName = "pivo-sound-all.jar"
+    archiveFileName = "dolbit-normalno-all.jar"
 
     mergeServiceFiles()
 }

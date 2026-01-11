@@ -1,4 +1,4 @@
-# pivo-sound
+# dolbit-normalno
 A feature-rich discord music bot written in 100% Kotlin
 
 Bot currently supports following sources:
